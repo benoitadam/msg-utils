@@ -16,4 +16,3 @@ xmlhttprequest/lib/XMLHttpRequest.js:
    * @license MIT
    *)
 */
-//# sourceMappingURL=node.js.map

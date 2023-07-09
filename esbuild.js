@@ -2,16 +2,15 @@ const package = require('./package.json');
 const esbuild = require('esbuild');
 const fs = require('fs');
 
-// Automatically exclude all node_modules from the bundled version
-const { nodeExternalsPlugin } = require('esbuild-node-externals')
-
 function build(outfile, options) {
   esbuild.build({
     entryPoints: ['src/index.ts'],
     outfile: outfile,
     bundle: true,
     minify: true,
-    sourcemap: true,
+    treeShaking: true,
+    platform: 'node',
+    format: 'cjs',
     ...options,
     define: {
       __VERSION: JSON.stringify(package.version),
@@ -38,11 +37,11 @@ const nodeConfig = {
   }
 }
 
-build('lib/node.js', {
+build('dist/node.js', {
   ...nodeConfig
 });
 
-build('lib/index.js', {
+build('dist/index.js', {
   entryPoints: ['src/index.browser.ts'],
   target: ['chrome58', 'firefox57', 'safari11', 'edge16'],
   external: ['react'],
@@ -54,6 +53,7 @@ build('lib/index.js', {
 build('build/all.spec.js', {
   ...nodeConfig,
   minify: false,
+  sourcemap: true,
   entryPoints: ['test/all.spec.ts']
 });
 
