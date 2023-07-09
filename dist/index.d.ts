@@ -620,7 +620,7 @@ declare module "react/index" {
 declare module "index.browser" {
     export * from "index.common";
     export * from "react/index";
-    export const VERSION: boolean;
+    export const VERSION: string;
 }
 declare module "stored/NodeLocalStorage" {
     export default class NodeLocalStorage implements Storage {
@@ -636,7 +636,12 @@ declare module "stored/NodeLocalStorage" {
 }
 declare module "index.node" {
     export * from "index.common";
-    export const VERSION: boolean;
+    export const VERSION: string;
+}
+declare module "msg-utils" {
+    export * from "index.common";
+    export * from "react/index";
+    export const VERSION = "";
 }
 declare module "array/first" {
     /**

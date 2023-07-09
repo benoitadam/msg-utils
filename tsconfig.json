@@ -1,16 +1,19 @@
 {
   "include": ["src/**/*"],
   "compilerOptions": {
-    "declaration": true,
-    "target": "esnext",
     "lib": ["esnext", "dom"],
-    "strict": true,
     "noImplicitAny": false,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-
     "rootDir": "src",
     "outFile": "dist/index.d.ts",
-    "emitDeclarationOnly": true
+    "module": "esnext",
+    "target": "esnext",
+    "declaration": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "emitDeclarationOnly": true,
+    "newLine": "lf",
+    "composite": true
   }
 }

@@ -1,1 +1,1 @@
-declare var __VERSION: boolean;
+declare var __VERSION: string;
