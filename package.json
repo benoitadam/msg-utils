@@ -1,6 +1,6 @@
 {
   "name": "msg-utils",
-  "version": "0.0.103",
+  "version": "0.0.105",
   "private": false,
   "description": "Several small practical and light tools.",
   "license": "MIT",
@@ -14,8 +14,7 @@
   },
   "files": ["dist","src"],
   "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/benoitadam/msg-utils.git"

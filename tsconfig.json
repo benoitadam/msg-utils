@@ -10,7 +10,7 @@
     "moduleResolution": "node",
 
     "rootDir": "src",
-    "outFile": "lib/index.d.ts",
+    "outFile": "dist/index.d.ts",
     "emitDeclarationOnly": true
   }
 }

@@ -14,7 +14,6 @@ function build(outfile, options) {
     ...options,
     define: {
       __VERSION: JSON.stringify(package.version),
-      ...options.define,
     },
   })
     .then(() => {
@@ -31,10 +30,6 @@ const nodeConfig = {
   entryPoints: ['src/index.node.ts'],
   platform: 'node',
   target: ['node12'],
-  // external: ['xmlhttprequest'],
-  define: {
-    globalThis: "global"
-  }
 }
 
 build('dist/node.js', {
@@ -45,9 +40,6 @@ build('dist/index.js', {
   entryPoints: ['src/index.browser.ts'],
   target: ['chrome58', 'firefox57', 'safari11', 'edge16'],
   external: ['react'],
-  define: {
-    globalThis: "window"
-  }
 });
 
 build('build/all.spec.js', {
