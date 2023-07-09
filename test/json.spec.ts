@@ -3,13 +3,13 @@ import { parseJson, getJson, cloneJson } from '../src/index.node';
 describe('json', () => {
   test(`cloneJson`, () => {
     const a = { n: 1 };
-    expect(cloneJson("abcd")).toEqual("abcd");
+    expect(cloneJson('abcd')).toEqual('abcd');
     expect(cloneJson(a, { n: 2 }).n).toEqual(a.n);
     const b = cloneJson(a);
     b.n = 2;
     expect(b).not.toEqual(a);
   });
-  
+
   test(`parseJson`, () => {
     expect(parseJson('"abcd"')).toEqual('abcd');
     expect(parseJson('{"a":1}')).toEqual({ a: 1 });
@@ -26,5 +26,3 @@ describe('json', () => {
     expect(getJson(a, 'error')).toEqual('error');
   });
 });
-
-

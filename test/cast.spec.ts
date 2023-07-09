@@ -1,4 +1,12 @@
-import { toString, toArray, toRecord, toBoolean, toDate, toError, toNumber } from '../src/index.node';
+import {
+  toString,
+  toArray,
+  toRecord,
+  toBoolean,
+  toDate,
+  toError,
+  toNumber,
+} from '../src/index.node';
 
 describe('cast', () => {
   test(`toString`, () => {
@@ -34,10 +42,10 @@ describe('cast', () => {
     expect(toDate(now, d0).getTime()).toEqual(nowTime);
     expect(toDate(nowTime, d0).getTime()).toEqual(nowTime);
   });
-  
+
   test(`toError`, () => {
-    expect(toError(new Error("test")).message).toEqual("test");
-    expect(toError("test").message).toEqual("test");
+    expect(toError(new Error('test')).message).toEqual('test');
+    expect(toError('test').message).toEqual('test');
   });
 
   test(`toNumber`, () => {
@@ -54,5 +62,3 @@ describe('cast', () => {
     expect(toNumber('2a')).toEqual(2);
   });
 });
-
-

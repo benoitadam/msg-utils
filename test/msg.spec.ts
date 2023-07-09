@@ -28,11 +28,11 @@ describe('Msg', () => {
     expect(a).toEqual(1);
     expect(b).toEqual(2);
   });
-  
+
   test(`Msg next callback`, () => {
     const o1 = new Msg(0);
     expect(o1.val).toEqual(0);
-    o1.next(v => v + 1);
+    o1.next((v) => v + 1);
     expect(o1.val).toEqual(1);
   });
 
@@ -55,10 +55,10 @@ describe('Msg', () => {
 
   test(`Msg map`, async () => {
     const o1 = new Msg(0);
-    const map = o1.map(v => v + 1);
+    const map = o1.map((v) => v + 1);
     let v = map.get();
 
-    map.on(next => v = next);
+    map.on((next) => (v = next));
 
     expect(map.get()).toEqual(1);
     expect(v).toEqual(1);

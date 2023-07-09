@@ -32,6 +32,7 @@ const nodeConfig = {
   entryPoints: ['src/index.node.ts'],
   platform: 'node',
   target: ['node12'],
+  // external: ['xmlhttprequest'],
   define: {
     globalThis: "global"
   }

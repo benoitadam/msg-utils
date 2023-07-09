@@ -30,7 +30,7 @@ describe('array', () => {
     expect(moveItem(items, a, -20)).toEqual([0, a, 1, 2, 3]);
     expect(moveItem(items, a, +4)).toEqual([a, 0, 1, 2, 3]);
   });
-  
+
   test(`last`, async () => {
     expect(last([0, 1, 2])).toEqual(2);
   }, 10);
@@ -40,5 +40,3 @@ describe('array', () => {
     expect(range(3, 5)).toEqual([3, 4, 5]);
   }, 10);
 });
-
-

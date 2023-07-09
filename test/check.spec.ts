@@ -1,4 +1,13 @@
-import { isArray, isDate, isEmpty, isRecord, isFunction, isNil, isString, isUuid } from '../src/index.node';
+import {
+  isArray,
+  isDate,
+  isEmpty,
+  isRecord,
+  isFunction,
+  isNil,
+  isString,
+  isUuid,
+} from '../src/index.node';
 
 describe('check', () => {
   test(`isArray`, () => {
@@ -47,7 +56,7 @@ describe('check', () => {
     expect(isFunction({})).toBe(false);
     expect(isFunction('a')).toBe(false);
   });
-  
+
   test(`isNil`, () => {
     expect(isNil(null)).toBe(true);
     expect(isNil(undefined)).toBe(true);
@@ -63,16 +72,14 @@ describe('check', () => {
 
   test('isUuid 00000000-0000-0000-0000-000000000000', () => {
     expect(isUuid('00000000-0000-0000-0000-000000000000')).toBe(true);
-  })
+  });
   test('isUuid ffffffff-ffff-ffff-ffff-ffffffffffff', () => {
     expect(isUuid('ffffffff-ffff-ffff-ffff-ffffffffffff')).toBe(true);
-  })
+  });
   test('isUuid 7ae77ebe-16c8-458b-8a44-4396dbe7f6f4', () => {
     expect(isUuid('7ae77ebe-16c8-458b-8a44-4396dbe7f6f4')).toBe(true);
-  })
+  });
   test('isUuid 7ae77ebe16c8458b8a444396dbe7f6f4', () => {
     expect(isUuid('7ae77ebe16c8458b8a444396dbe7f6f4')).toBe(true);
-  })
+  });
 });
-
-

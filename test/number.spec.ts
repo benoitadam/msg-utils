@@ -10,7 +10,7 @@ describe('number', () => {
     expect(bounds(5, 10)).toEqual(10);
     expect(bounds(15, 10)).toEqual(15);
   });
-  
+
   test(`diff`, () => {
     expect(diff(1, 5)).toEqual(4);
   });
@@ -22,7 +22,7 @@ describe('number', () => {
     expect(rand(5, 6)).toBeGreaterThan(5);
     expect(rand(5, 6)).toBeLessThan(6);
   });
-  
+
   test(`round`, () => {
     expect(round(1.12345)).toEqual(1);
     expect(round(1.12345, 1)).toEqual(1.1);
@@ -34,5 +34,3 @@ describe('number', () => {
     expect(round(123.456123, -2)).toEqual(100);
   });
 });
-
-
