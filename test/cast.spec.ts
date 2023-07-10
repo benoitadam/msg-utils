@@ -6,7 +6,7 @@ import {
   toDate,
   toError,
   toNumber,
-} from '../src/index.node';
+} from '../src';
 
 describe('cast', () => {
   test(`toString`, () => {

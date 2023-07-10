@@ -1,4 +1,4 @@
-import { Rest, rest } from '../src/index.node';
+import { Rest, rest } from '../src';
 
 describe('request', () => {
   test('constructor', () => {

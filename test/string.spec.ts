@@ -7,7 +7,7 @@ import {
   pascal,
   camel,
   uuid,
-} from '../src/index.node';
+} from '../src';
 
 describe('string', () => {
   test(`firstUpper`, () => {

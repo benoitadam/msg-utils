@@ -1,3 +1,15 @@
+declare module "stored/NodeLocalStorage" {
+    export default class NodeLocalStorage implements Storage {
+        [key: string]: any;
+        get length(): number;
+        save(): void;
+        clear(): void;
+        getItem(key: string): string | null;
+        key(index: number): string | null;
+        removeItem(key: string): void;
+        setItem(key: string, value: string): void;
+    }
+}
 declare module "array/compact" {
     /**
      * Creates an array with all falsy values removed.
@@ -586,7 +598,7 @@ declare module "string/index" {
     export { default as uuid } from "string/uuid";
     export { default as words } from "string/words";
 }
-declare module "index.common" {
+declare module "index" {
     export * from "array/index";
     export * from "cast/index";
     export * from "check/index";
@@ -599,49 +611,10 @@ declare module "index.common" {
     export * from "rest/index";
     export * from "stored/index";
     export * from "string/index";
-}
-declare module "react/useConstant" {
-    const _default_61: <T>(fn: () => T) => T;
-    export default _default_61;
-}
-declare module "react/useMsg" {
-    import Msg from "msg/Msg";
-    interface UseMsg {
-        <T = any>(msg: Msg<T>): T;
-        <T = any>(msg: Msg<T> | null | undefined): T | undefined;
-    }
-    const _default_62: UseMsg;
-    export default _default_62;
-}
-declare module "react/index" {
-    export { default as useConstant } from "react/useConstant";
-    export { default as useMsg } from "react/useMsg";
-}
-declare module "index.browser" {
-    export * from "index.common";
-    export * from "react/index";
-    export const VERSION: string;
-}
-declare module "stored/NodeLocalStorage" {
-    export default class NodeLocalStorage implements Storage {
-        [key: string]: any;
-        get length(): number;
-        save(): void;
-        clear(): void;
-        getItem(key: string): string | null;
-        key(index: number): string | null;
-        removeItem(key: string): void;
-        setItem(key: string, value: string): void;
-    }
-}
-declare module "index.node" {
-    export * from "index.common";
     export const VERSION: string;
 }
 declare module "msg-utils" {
-    export * from "index.common";
-    export * from "react/index";
-    export const VERSION = "";
+    export * from "index";
 }
 declare module "array/first" {
     /**
@@ -650,6 +623,24 @@ declare module "array/first" {
      * @param items
      * @returns
      */
-    const _default_63: <T>(items: T[]) => T;
-    export default _default_63;
+    const _default_61: <T>(items: T[]) => T;
+    export default _default_61;
+}
+declare module "msg/getUseMsg" {
+    import Msg from "msg/Msg";
+    type Destructor = () => void;
+    type EffectCallback = () => (void | Destructor);
+    type DependencyList = readonly unknown[];
+    type Dispatch<A> = (value: A) => void;
+    type SetStateAction<S> = S | ((prevState: S) => S);
+    interface IReact {
+        useEffect(effect: EffectCallback, deps?: DependencyList): void;
+        useState<S>(initialState: S | (() => S)): [S, Dispatch<SetStateAction<S>>];
+    }
+    interface UseMsg {
+        <T = any>(msg: Msg<T>): T;
+        <T = any>(msg: Msg<T> | null | undefined): T | undefined;
+    }
+    const _default_62: (React: IReact) => UseMsg;
+    export default _default_62;
 }

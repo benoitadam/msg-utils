@@ -1,4 +1,4 @@
-import { VERSION } from '../src/index.node';
+import { VERSION } from '../src';
 
 import './array.spec';
 import './cast.spec';

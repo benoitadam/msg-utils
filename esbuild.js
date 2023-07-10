@@ -15,6 +15,10 @@ function build(outfile, options) {
     define: {
       __VERSION: JSON.stringify(package.version),
     },
+    external: [
+      'xmlhttprequest',
+      'node:crypto',
+    ],
   })
     .then(() => {
       const size = fs.statSync(outfile).size / 1000;
@@ -27,7 +31,6 @@ function build(outfile, options) {
 }
 
 const nodeConfig = {
-  entryPoints: ['src/index.node.ts'],
   platform: 'node',
   target: ['node12'],
 }
@@ -37,9 +40,7 @@ build('dist/node.js', {
 });
 
 build('dist/index.js', {
-  entryPoints: ['src/index.browser.ts'],
   target: ['chrome58', 'firefox57', 'safari11', 'edge16'],
-  external: ['react'],
 });
 
 build('build/all.spec.js', {

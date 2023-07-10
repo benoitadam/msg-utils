@@ -1,4 +1,4 @@
-import { getStored, setStored } from '../src/index.node';
+import { getStored, setStored } from '../src';
 
 describe('stored', () => {
   test(`store string`, () => {
