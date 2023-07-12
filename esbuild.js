@@ -35,12 +35,9 @@ const nodeConfig = {
   target: ['node12'],
 }
 
-// build('dist/node.js', {
-//   ...nodeConfig
-// });
-
-build('dist/index.js', {
-  target: ['chrome58', 'firefox57', 'safari11', 'edge16'],
+build('./dist/index.js', {
+  target: ['node12', 'chrome58', 'firefox57', 'safari11', 'edge16'],
+  format: 'cjs'
 });
 
 build('build/all.spec.js', {
@@ -49,6 +46,22 @@ build('build/all.spec.js', {
   sourcemap: true,
   entryPoints: ['test/all.spec.ts']
 });
+
+// const nodeJs = ['node12'];
+// const newBrowsers = ['chrome61', 'firefox60', 'safari11', 'edge16'];
+// const oldBrowsers = ['chrome58', 'firefox57', 'safari11', 'edge16'];
+
+// build('dist/node.js', {
+//   ...nodeConfig
+// });
+
+// build('./dist/node-cjs.js', { target: nodeJs, format: 'cjs' });
+// build('./dist/browser-esm.js', { target: newBrowsers, format: 'esm' });
+// build('./dist/browser-cjs.js', { target: oldBrowsers, format: 'cjs' });
+
+// build('dist/index.js', {
+//   target: ['chrome58', 'firefox57', 'safari11', 'edge16'],
+// });
 
 // build('lib/index.esm.js', { format: 'esm', target: ['esnext'] });
 // build('lib/index.node.js', { platform: 'node', target: ['node12'] });
