@@ -1,7 +1,7 @@
-import isDate from '../check/isDate';
-import isString from '../check/isString';
-import isNumber from '../check/isNumber';
-import isNil from '../check/isNil';
+import { isDate } from '../check/isDate';
+import { isString } from '../check/isString';
+import { isNumber } from '../check/isNumber';
+import { isNil } from '../check/isNil';
 
 interface ToDate {
   (v: any): Date;
@@ -9,7 +9,7 @@ interface ToDate {
   <TDef>(v: any, defVal?: TDef): Date | TDef | undefined;
 }
 
-export default (<TDef>(v: any, defVal?: TDef): Date | TDef | undefined =>
+export const toDate = (<TDef>(v: any, defVal?: TDef): Date | TDef | undefined =>
   isDate(v)
     ? v
     : isString(v) || isNumber(v)

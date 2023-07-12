@@ -1,6 +1,6 @@
-const package = require('./package.json');
-const esbuild = require('esbuild');
-const fs = require('fs');
+import { execSync } from 'child_process';
+import esbuild from 'esbuild';
+import { statSync, readFileSync, writeFileSync } from 'fs';
 
 function build(outfile, options) {
   esbuild.build({
@@ -11,17 +11,14 @@ function build(outfile, options) {
     treeShaking: true,
     platform: 'node',
     format: 'cjs',
-    ...options,
-    define: {
-      __VERSION: JSON.stringify(package.version),
-    },
     external: [
       'xmlhttprequest',
       'node:crypto',
     ],
+    ...options,
   })
     .then(() => {
-      const size = fs.statSync(outfile).size / 1000;
+      const size = statSync(outfile).size / 1000;
       console.debug('result', outfile, size);
     })
     .catch((error) => {
@@ -30,22 +27,39 @@ function build(outfile, options) {
     });
 }
 
-const nodeConfig = {
-  platform: 'node',
-  target: ['node12'],
-}
-
 build('./dist/index.js', {
   target: ['node12', 'chrome58', 'firefox57', 'safari11', 'edge16'],
   format: 'cjs'
 });
 
-build('build/all.spec.js', {
-  ...nodeConfig,
+build('./build/all.spec.js', {
   minify: false,
   sourcemap: true,
   entryPoints: ['test/all.spec.ts']
 });
+
+execSync('npx tsc');
+
+let typeTs = readFileSync('./dist/index.d.ts').toString();
+typeTs = typeTs.replace(/(}\r?\n)?declare module \"(.+)\" \{/g, '');
+typeTs = 'declare module "msg-utils" {\n' + typeTs;
+writeFileSync('./dist/index.d.ts', typeTs);
+
+// build('build/all.spec.js', {
+//   ...nodeConfig,
+//   minify: false,
+//   sourcemap: true,
+//   entryPoints: ['test/all.spec.ts']
+// });
+
+
+
+
+
+
+
+
+
 
 // const nodeJs = ['node12'];
 // const newBrowsers = ['chrome61', 'firefox60', 'safari11', 'edge16'];

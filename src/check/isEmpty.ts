@@ -1,4 +1,4 @@
-import isArray from './isArray';
+import { isArray } from './isArray';
 
-export default (value: any): boolean =>
+export const isEmpty = (value: any): boolean =>
   !value || (isArray(value) ? value : Object.keys(value)).length === 0;

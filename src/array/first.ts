@@ -4,4 +4,4 @@
  * @param items
  * @returns
  */
-export default <T>(items: T[]) => items[0];
+export const first = <T>(items: T[]) => items[0];

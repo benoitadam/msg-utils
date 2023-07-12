@@ -1,2 +1,2 @@
-export default (value: any): value is Record<any, any> =>
+export const isRecord = (value: any): value is Record<any, any> =>
   value instanceof Object && !Array.isArray(value);

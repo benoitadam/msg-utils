@@ -1,3 +1,3 @@
-import toNumber from './toNumber';
+import { toNumber } from './toNumber';
 
-export default (v: any) => toNumber(v, 0);
+export const nbr = (v: any) => toNumber(v, 0);

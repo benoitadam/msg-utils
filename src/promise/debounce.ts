@@ -3,7 +3,7 @@
  * a b c - - - d - - e - -
  * - - - - c - - - d - - e
  */
-export default <A = unknown>(fn: (value: A) => unknown, ms: number) => {
+export const debounce = <A = unknown>(fn: (value: A) => unknown, ms: number) => {
   let timer: any, lastValue: A;
   const update = () => {
     timer = null;

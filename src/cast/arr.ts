@@ -1,3 +1,3 @@
-import toArray from './toArray';
+import { toArray } from './toArray';
 
-export default <T = any>(v: T[] | T | null | undefined) => toArray(v);
+export const arr = <T = any>(v: T[] | T | null | undefined) => toArray(v);

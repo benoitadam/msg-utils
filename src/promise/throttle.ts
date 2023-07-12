@@ -5,7 +5,7 @@
  * a - - d - - - - e - - g - - (3s)
  * a - - - d - - - e - - - g - (4s)
  */
-export default <A = unknown>(fn: (value: A) => unknown, ms: number) => {
+export const throttle = <A = unknown>(fn: (value: A) => unknown, ms: number) => {
   let lastTime = 0,
     lastValue: A,
     timer: any;

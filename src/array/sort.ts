@@ -1,7 +1,7 @@
-import str from '../cast/str';
-import { isString } from '../check';
+import { str } from '../cast/str';
+import { isString } from '../check/isString';
 
-export default <T = any>(items: T[], prop: (item: T) => string | number | Date = str) =>
+export const sort = <T = any>(items: T[], prop: (item: T) => string | number | Date = str) =>
   items.sort((a, b) => {
     const pA = prop(a);
     const pB = prop(b);

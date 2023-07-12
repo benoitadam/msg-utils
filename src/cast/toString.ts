@@ -1,3 +1,3 @@
-import isNil from '../check/isNil';
+import { isNil } from '../check/isNil';
 
-export default (v: any, def: string = ''): string => (isNil(v) ? def : String(v));
+export const toString = (v: any, def: string = ''): string => (isNil(v) ? def : String(v));

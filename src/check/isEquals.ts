@@ -1,7 +1,7 @@
-import getJson from '../json/getJson';
-import isRecord from './isRecord';
+import { getJson } from '../json/getJson';
+import { isRecord } from './isRecord';
 
-const isEquals = (a: any, b: any) => {
+export const isEquals = (a: any, b: any) => {
   if (a === b) return true;
   if (typeof a !== typeof b) return false;
   if (Array.isArray(a)) {
@@ -18,5 +18,3 @@ const isEquals = (a: any, b: any) => {
   }
   return getJson(a) === getJson(b);
 };
-
-export default isEquals;

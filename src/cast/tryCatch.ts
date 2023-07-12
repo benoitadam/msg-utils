@@ -3,7 +3,7 @@ interface TryCatch {
   <T = any, U = any>(v: () => any, def: U): T | U;
 }
 
-export default ((fun: () => any, def: any): any => {
+export const tryCatch = ((fun: () => any, def: any): any => {
   try {
     return fun();
   } catch (error) {

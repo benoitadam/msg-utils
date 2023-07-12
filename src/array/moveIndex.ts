@@ -6,7 +6,7 @@
  * @param {number} addIndex - The index to move the item to.
  * @returns {T[]} A new array with the item moved.
  */
-export default <T>(items: T[], from: number, to: number) => {
+export const moveIndex = <T>(items: T[], from: number, to: number) => {
   if (from === to) return items;
   const removes = items.splice(from, 1);
   items.splice(to, 0, removes[0]);

@@ -60,10 +60,9 @@
   },
   "peerDependenciesMeta": {},
   "scripts": {
-    "tsc": "tsc",
-    "build": "rm -rf dist && node esbuild.js && tsc",
-    "pretest": "node esbuild.js",
-    "test": "jest build/all.spec.js --verbose",
-    "prettify": "prettier --write \"./test/**/*.{js,jsx,ts,tsx,json}\""
+    "build": "node ./build.mjs",
+    "pretest": "node ./build.mjs",
+    "test": "jest ./build/all.spec.js --verbose",
+    "prettify": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,json}\""
   }
 }

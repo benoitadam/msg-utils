@@ -4,4 +4,4 @@
  * @param items
  * @returns
  */
-export default <T>(items: T[]) => items[items.length - 1];
+export const last = <T>(items: T[]) => items[items.length - 1];

@@ -1,1 +1,1 @@
-export default <T = any>(value: T): T => value;
+export const me = <T = any>(value: T): T => value;

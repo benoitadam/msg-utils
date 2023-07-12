@@ -1,13 +1,13 @@
-import { removeItem } from '../array';
-import isFunction from '../check/isFunction';
-import isNotNull from '../check/isNotNull';
-import debounce from '../promise/debounce';
-import throttle from '../promise/throttle';
-import getStored from '../stored/getStored';
-import setStored from '../stored/setStored';
+import { removeItem } from '../array/removeItem';
+import { isFunction } from '../check/isFunction';
+import { isNotNull } from '../check/isNotNull';
+import { debounce } from '../promise/debounce';
+import { throttle } from '../promise/throttle';
+import { getStored } from '../stored/getStored';
+import { setStored } from '../stored/setStored';
 import { IMsg, IMsgFilter, IMsgHandler, IMsgReadonly, IMsgSet, IMsgSubscription } from './types';
 
-export default class Msg<T = any> implements IMsg<T> {
+export class Msg<T = any> implements IMsg<T> {
   static byKey: Record<string, Msg> = {};
 
   static get<T>(key: string, initValue: T, isStored?: boolean): Msg<T> {

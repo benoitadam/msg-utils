@@ -1,3 +1,3 @@
-import toString from './toString';
+import { toString } from './toString';
 
-export default (v: any) => toString(v);
+export const str = (v: any) => toString(v);

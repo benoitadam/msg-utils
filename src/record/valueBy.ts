@@ -1,7 +1,7 @@
-import isRecord from '../check/isRecord';
-import isArray from '../check/isArray';
-import isFunction from '../check/isFunction';
-import isNil from '../check/isNil';
+import { isRecord } from '../check/isRecord';
+import { isArray } from '../check/isArray';
+import { isFunction } from '../check/isFunction';
+import { isNil } from '../check/isNil';
 
 type IKey<T> = undefined | null | keyof T | ((item: T, index: number) => any);
 type IVal<T, U> = undefined | null | keyof T | ((item: T, index: number) => U);
@@ -16,7 +16,7 @@ interface ValueBy {
   <T, U>(record: Record<string, T>, key: RKey<T>, val: RVal<T, U>): Record<string, U>;
 }
 
-export default ((items: any, key: any, val?: any): Record<string, any> => {
+export const valueBy = ((items: any, key: any, val?: any): Record<string, any> => {
   const r: Record<string, any[]> = {};
   const getK = isFunction(key) ? key : isNil(key) ? (_: any, k: any) => k : (i: any) => i[key];
   const getV = isFunction(val) ? val : isNil(val) ? (i: any) => i : (i: any) => i[val];
