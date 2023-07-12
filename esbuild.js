@@ -35,9 +35,9 @@ const nodeConfig = {
   target: ['node12'],
 }
 
-build('dist/node.js', {
-  ...nodeConfig
-});
+// build('dist/node.js', {
+//   ...nodeConfig
+// });
 
 build('dist/index.js', {
   target: ['chrome58', 'firefox57', 'safari11', 'edge16'],

@@ -10,7 +10,7 @@ import { IMsg, IMsgFilter, IMsgHandler, IMsgReadonly, IMsgSet, IMsgSubscription 
 export default class Msg<T = any> implements IMsg<T> {
   static byKey: Record<string, Msg> = {};
 
-  static get<T>(key: string, initValue: T, isStored?: boolean) {
+  static get<T>(key: string, initValue: T, isStored?: boolean): Msg<T> {
     let msg = this.byKey[key];
     if (msg) return msg;
     msg = new Msg<T>(initValue, key);

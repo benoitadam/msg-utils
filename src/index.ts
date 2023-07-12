@@ -1,15 +1,6 @@
-import NodeLocalStorage from './stored/NodeLocalStorage';
+// import NodeLocalStorage from './stored/NodeLocalStorage';
 // import { XMLHttpRequest } from 'xmlhttprequest';
 // import { webcrypto } from 'node:crypto';
-
-if (!globalThis.localStorage)
-    globalThis.localStorage = new NodeLocalStorage();
-
-if (!globalThis.XMLHttpRequest)
-    globalThis.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
-
-if (!globalThis.crypto)
-    globalThis.crypto = require('node:crypto').webcrypto as Crypto;
 
 export * from './array';
 export * from './cast';

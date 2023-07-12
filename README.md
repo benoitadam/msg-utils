@@ -2,6 +2,36 @@
 
 Several small practical and light tools.
 
+## For React
+
+### useMsg hooks
+
+    import { Msg } from "msg-utils";
+    import { useEffect, useState } from "react";
+
+    export default function useMsg<T = any>(msg: Msg<T>): T;
+    export default function useMsg<T = any>(msg: Msg<T> | null | undefined): T | undefined;
+    export default function useMsg<T = any>(msg: Msg<T> | null | undefined): T | undefined {
+        const setState = useState(0)[1];
+        useEffect(() => msg?.on(() => setState((i) => i + 1)), [msg]);
+        return msg ? msg.get() : undefined;
+    };
+
+## For NodeJs
+
+### For getStored and setStored
+
+    const storage: { [key: string]: string } = {};
+    (globalThis as any).localStorage = {
+        getItem: (key: string) => storage[key] || null,
+        removeItem: (key: string) => deleteKey(storage, key),
+        setItem: (key: string, value: string) => storage[key] = value,
+    };
+
+### For Rest
+
+    globalThis.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+
 ## array
 ## cast
 ## check

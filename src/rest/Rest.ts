@@ -9,7 +9,7 @@ export default class Rest {
   }
 
   newXhr() {
-    return new XMLHttpRequest();
+    return new globalThis.XMLHttpRequest();
   }
 
   send<T = any>(url: RestURL, options: RestOptions<T> = {}) {

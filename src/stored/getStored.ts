@@ -6,4 +6,4 @@ interface GetStored {
 }
 
 export default (<T = any>(key: string, defVal?: T): T | undefined =>
-  parseJson(localStorage.getItem(key), defVal)) as GetStored;
+  parseJson(globalThis.localStorage.getItem(key), defVal)) as GetStored;

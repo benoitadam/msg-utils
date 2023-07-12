@@ -3,6 +3,6 @@ import getJson from '../json/getJson';
 
 export default <T = any>(key: string, value: T) => {
   const json = isNil(value) ? undefined : getJson(value);
-  if (isNil(json)) localStorage.removeItem(key);
-  else localStorage.setItem(key, json);
+  if (isNil(json)) globalThis.localStorage.removeItem(key);
+  else globalThis.localStorage.setItem(key, json);
 };
