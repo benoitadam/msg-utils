@@ -1,7 +1,7 @@
 import { RestData, RestOptions, RestURL } from './types';
 export default class Rest {
-    options?: RestOptions | undefined;
-    constructor(options?: RestOptions | undefined);
+    options?: RestOptions<any> | undefined;
+    constructor(options?: RestOptions<any> | undefined);
     new(options?: RestOptions): Rest;
     newXhr(): XMLHttpRequest;
     send<T = any>(url: RestURL, options?: RestOptions<T>): Promise<T>;
