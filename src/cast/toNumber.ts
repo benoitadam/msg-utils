@@ -10,7 +10,7 @@ interface ToNumber {
    * toNumber('3,5') -> 3.5
    */
   (v: any): number | undefined;
-  
+
   /**
    * toNumber({}, a) -> a
    * toNumber('x', a) -> a

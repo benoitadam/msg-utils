@@ -1,4 +1,4 @@
-import { isRecord } from "../check/isRecord";
+import { isRecord } from '../check/isRecord';
 
 interface ToRecord {
   <T = any>(v: T | null | undefined): T | Partial<T>;

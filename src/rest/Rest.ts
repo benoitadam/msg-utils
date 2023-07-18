@@ -61,17 +61,17 @@ const xhrRest = <T = any>(
     xhr.responseType = responseType || 'json';
 
     if (isFunction(headers)) headers = headers();
-    
+
     if (noCache) {
       headers = {
         'Cache-Control': 'no-cache, no-store, max-age=0',
-        'Expires': 'Thu, 1 Jan 1970 00:00:00 GMT',
-        'Pragma': 'no-cache',
-        ...headers
+        Expires: 'Thu, 1 Jan 1970 00:00:00 GMT',
+        Pragma: 'no-cache',
+        ...headers,
       };
       params = {
-        'noCache': Date.now(),
-        ...params
+        noCache: Date.now(),
+        ...params,
       };
     }
 
@@ -80,7 +80,8 @@ const xhrRest = <T = any>(
       if (params) {
         const searchParams = urlObj.searchParams;
         Object.entries(params).forEach((kv) => {
-          const key = kv[0], val = kv[1];
+          const key = kv[0],
+            val = kv[1];
           if (val === null) {
             searchParams.delete(key);
           }
@@ -103,7 +104,7 @@ const xhrRest = <T = any>(
 
     if (data) xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('Accept', acceptMap[xhr.responseType] || acceptJson);
-    
+
     if (headers) {
       Object.entries(headers).forEach((kv) => xhr.setRequestHeader(kv[0], kv[1]));
     }

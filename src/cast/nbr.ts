@@ -8,7 +8,7 @@ import { toNumber } from './toNumber';
  * nbr(3.5) -> 3.5
  * nbr('3.5') -> 3.5
  * nbr('3,5') -> 3.5
- * @param v 
- * @returns 
+ * @param v
+ * @returns
  */
 export const nbr = (v: any) => toNumber(v, 0);
