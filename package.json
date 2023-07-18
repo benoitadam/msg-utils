@@ -69,10 +69,12 @@
   },
   "peerDependenciesMeta": {},
   "scripts": {
-    "clean": "node ./build.mjs clean",
-    "build": "node ./build.mjs clean build",
-    "pretest": "node ./build.mjs clean test",
+    "start": "node ./start.mjs",
+    "clean": "npm start clean",
+    "build": "npm start build",
+    "pretest": "npm start test",
     "test": "jest ./build/all.spec.js --verbose",
+    "publish": "npm start publish",
     "prettify": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,json}\""
   },
   "typesVersions": {
