@@ -1,4 +1,4 @@
 import { getJson } from '../json/getJson';
-import { valueBy } from '../record/valueBy';
+import { valueBy } from '../record/groupBy';
 
 export const uniq = <T>(arr: T[]): T[] => Object.values(valueBy(arr, (v) => getJson(v)));

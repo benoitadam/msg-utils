@@ -25,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/benoitadam/msg-utils/issues"
   },
-  "homepage": "https://m4k.fr/msg-utils",
+  "homepage": "https://github.com/benoitadam/msg-utils",
   "keywords": [
     "tools",
     "helpers",
@@ -76,7 +76,7 @@
     "prettify": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,json}\""
   },
   "typesVersions": {
-    ">=4.2": {
+    "*": {
       "*": [
         "src/*"
       ]

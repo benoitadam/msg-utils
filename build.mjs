@@ -33,7 +33,7 @@ async function esbuildBuild(outfile, options) {
     });
 }
 
-export async function createIndex() {
+export async function generate() {
   let allFiles = [];
   const dirs = await readdir('src');
 
@@ -63,6 +63,8 @@ export async function clean() {
 export async function build() {
   console.debug('build');
 
+  await clean();
+  await generate();
   await exec('npx tsc');
 
   let typeTs = (await readFile('./dist/index.d.ts')).toString();
@@ -71,12 +73,13 @@ export async function build() {
   await writeFile('./dist/index.d.ts', typeTs);
 
   await esbuildBuild('./dist/index.js', {
-    target: ['node12', 'chrome58', 'firefox57', 'safari11', 'edge16'],
-    format: 'cjs'
+    // target: ['node12', 'chrome58', 'firefox57', 'safari11', 'edge16'],
+    // format: 'cjs'
   });
 }
 
 export async function test() {
+  await clean();
   await esbuildBuild('./build/all.spec.js', {
     minify: false,
     sourcemap: true,
@@ -84,8 +87,14 @@ export async function test() {
   });
 }
 
+export async function publish() {
+  await clean();
+  await build();
+  await exec('npm publish --access public');
+}
+
 Promise.all(process.argv.map(async (arg) => {
-  const fun = { createIndex, clean, build, test }[arg];
+  const fun = { generate, clean, build, test }[arg];
   if (fun) {
     const start = Date.now();
     console.debug(arg, 'start');

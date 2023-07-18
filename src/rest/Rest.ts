@@ -15,6 +15,7 @@ export type RestOptions<T = any> = {
   data?: RestData;
   formData?: FormData;
   responseType?: XMLHttpRequestResponseType;
+  noCache?: boolean;
   send?: (xhr: XMLHttpRequest, body: string | FormData | undefined) => void;
   onInit?: (xhr: XMLHttpRequest) => void;
   onError?: (error: RestError, xhr: XMLHttpRequest) => void;
@@ -37,56 +38,90 @@ const xhrRest = <T = any>(
   options: RestOptions<T> = {},
 ): Promise<T> => {
   return new Promise((resolve, reject) => {
-    if (options.onInit) options.onInit(xhr);
+    const {
+      onInit,
+      baseUrl,
+      onProgress,
+      onError,
+      onSuccess,
+      send,
+      data,
+      timeout,
+      responseType,
+      noCache,
+      method,
+      formData,
+    } = options;
 
-    xhr.timeout = options.timeout || 20000;
-    xhr.responseType = options.responseType || 'json';
+    let { headers, params } = options;
 
-    if (options.params || options.baseUrl) {
-      const urlObj = new URL(url, options.baseUrl);
-      if (options.params) {
-        Object.entries(options.params).forEach((kv) => {
-          const key = kv[0],
-            val = kv[1];
+    if (onInit) onInit(xhr);
+
+    xhr.timeout = timeout || 20000;
+    xhr.responseType = responseType || 'json';
+
+    if (isFunction(headers)) headers = headers();
+    
+    if (noCache) {
+      headers = {
+        'Cache-Control': 'no-cache, no-store, max-age=0',
+        'Expires': 'Thu, 1 Jan 1970 00:00:00 GMT',
+        'Pragma': 'no-cache',
+        ...headers
+      };
+      params = {
+        'noCache': Date.now(),
+        ...params
+      };
+    }
+
+    if (params || baseUrl) {
+      const urlObj = new URL(url, baseUrl);
+      if (params) {
+        const searchParams = urlObj.searchParams;
+        Object.entries(params).forEach((kv) => {
+          const key = kv[0], val = kv[1];
+          if (val === null) {
+            searchParams.delete(key);
+          }
           if (Array.isArray(val)) {
-            urlObj.searchParams.delete(key);
-            Object.values(val).forEach((p) => urlObj.searchParams.append(key, String(p)));
+            searchParams.delete(key);
+            Object.values(val).forEach((p) => searchParams.append(key, String(p)));
             return;
           }
           if (typeof val === 'object') {
-            urlObj.searchParams.set(key, JSON.stringify(val));
+            searchParams.set(key, JSON.stringify(val));
             return;
           }
-          urlObj.searchParams.set(key, String(val));
+          searchParams.set(key, String(val));
         });
       }
       url = urlObj;
     }
 
-    xhr.open((options.method || 'POST').toUpperCase(), url);
+    xhr.open((method || 'POST').toUpperCase(), url);
 
-    if (options.data) xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+    if (data) xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('Accept', acceptMap[xhr.responseType] || acceptJson);
-    if (options.headers) {
-      const headers = isFunction(options.headers) ? options.headers() : options.headers;
+    
+    if (headers) {
       Object.entries(headers).forEach((kv) => xhr.setRequestHeader(kv[0], kv[1]));
     }
 
-    if (options.onProgress) {
-      const onProgress = options.onProgress;
+    if (onProgress) {
       xhr.addEventListener('progress', (e) => onProgress(e, e.loaded / e.total));
     }
 
-    const body = options.data ? JSON.stringify(options.data) : options.formData;
+    const body = data ? JSON.stringify(data) : formData;
 
-    xhr.onload = () => {
+    xhr.onloadend = () => {
       if (xhr.status >= 400) {
         const error = new RestError(xhr);
-        if (options.onError) options.onError(error, xhr);
+        if (onError) onError(error, xhr);
         reject(error);
       }
 
-      if (options.onSuccess) options.onSuccess(xhr.response as T, xhr);
+      if (onSuccess) onSuccess(xhr.response as T, xhr);
 
       // console.debug('Rest success', url, options, xhr.response);
       resolve(xhr.response as T);
@@ -95,11 +130,11 @@ const xhrRest = <T = any>(
     xhr.onerror = () => {
       // console.debug('Rest error', url, options, err);
       const error = new RestError(xhr);
-      if (options.onError) options.onError(error, xhr);
+      if (onError) onError(error, xhr);
       reject(error);
     };
 
-    if (options.send) options.send(xhr, body);
+    if (send) send(xhr, body);
     else xhr.send(body);
   });
 };

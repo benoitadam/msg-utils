@@ -56,7 +56,6 @@ export * from './promise/withTimeout';
 export * from './record/deleteKey';
 export * from './record/groupBy';
 export * from './record/sortKey';
-export * from './record/valueBy';
 export * from './rest/Rest';
 export * from './stored/getStored';
 export * from './stored/setStored';
