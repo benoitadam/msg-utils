@@ -80,7 +80,11 @@ const xhrRest = <T = any>(
     const body = options.data ? JSON.stringify(options.data) : options.formData;
 
     xhr.onload = () => {
-      if (xhr.status >= 400) throw xhr.status;
+      if (xhr.status >= 400) {
+        const error = new RestError(xhr);
+        if (options.onError) options.onError(error, xhr);
+        reject(error);
+      }
 
       if (options.onSuccess) options.onSuccess(xhr.response as T, xhr);
 

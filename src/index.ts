@@ -1,88 +1,68 @@
+///// GENERATED FILE /////
 
-// array
-export { compact } from './array/compact';
-export { last } from './array/last';
-export { moveIndex } from './array/moveIndex';
-export { moveItem } from './array/moveItem';
-export { range } from './array/range';
-export { removeItem } from './array/removeItem';
-export { sort } from './array/sort';
-export { uniq } from './array/uniq';
-
-// cast
-export { arr } from './cast/arr';
-export { bool } from './cast/bool';
-export { me } from './cast/me';
-export { nbr } from './cast/nbr';
-export { rec } from './cast/rec';
-export { str } from './cast/str';
-export { toArray } from './cast/toArray';
-export { toBoolean } from './cast/toBoolean';
-export { toDate } from './cast/toDate';
-export { toError } from './cast/toError';
-export { toNull } from './cast/toNull';
-export { toNumber } from './cast/toNumber';
-export { toRecord } from './cast/toRecord';
-export { toString } from './cast/toString';
-export { toVoid } from './cast/toVoid';
-export { tryCatch } from './cast/tryCatch';
-
-// check
-export { isArray } from './check/isArray';
-export { isDate } from './check/isDate';
-export { isEmpty } from './check/isEmpty';
-export { isEquals } from './check/isEquals';
-export { isFunction } from './check/isFunction';
-export { isNil } from './check/isNil';
-export { isNotNull } from './check/isNotNull';
-export { isRecord } from './check/isRecord';
-export { isString } from './check/isString';
-export { isUuid } from './check/isUuid';
-
-// clipboard
-export { copy } from './clipboard/copy';
-export { paste } from './clipboard/paste';
-
-// json
-export { cloneJson } from './json/cloneJson';
-export { getJson } from './json/getJson';
-export { parseJson } from './json/parseJson';
-
-// msg
-export { Msg } from './msg/Msg';
+export * from './array/compact';
+export * from './array/first';
+export * from './array/last';
+export * from './array/moveIndex';
+export * from './array/moveItem';
+export * from './array/range';
+export * from './array/removeItem';
+export * from './array/sort';
+export * from './array/uniq';
+export * from './cast/arr';
+export * from './cast/bool';
+export * from './cast/me';
+export * from './cast/nbr';
+export * from './cast/rec';
+export * from './cast/str';
+export * from './cast/toArray';
+export * from './cast/toBoolean';
+export * from './cast/toDate';
+export * from './cast/toError';
+export * from './cast/toNull';
+export * from './cast/toNumber';
+export * from './cast/toRecord';
+export * from './cast/toString';
+export * from './cast/toVoid';
+export * from './cast/tryCatch';
+export * from './check/isArray';
+export * from './check/isDate';
+export * from './check/isEmpty';
+export * from './check/isEquals';
+export * from './check/isFunction';
+export * from './check/isNil';
+export * from './check/isNotNull';
+export * from './check/isNumber';
+export * from './check/isRecord';
+export * from './check/isString';
+export * from './check/isUuid';
+export * from './clipboard/copy';
+export * from './clipboard/paste';
+export * from './json/cloneJson';
+export * from './json/getJson';
+export * from './json/parseJson';
+export * from './msg/Msg';
 export * from './msg/types';
-
-// number
-export { bounds } from './number/bounds';
-export { diff } from './number/diff';
-export { rand } from './number/rand';
-export { round } from './number/round';
-
-// promise
-export { debounce } from './promise/debounce';
-export { retry } from './promise/retry';
-export { sleep } from './promise/sleep';
-export { throttle } from './promise/throttle';
-export { TimeoutError } from './promise/TimeoutError';
-export { withTimeout } from './promise/withTimeout';
-
-// record
-export { deleteKey } from './record/deleteKey';
-export { groupBy } from './record/groupBy';
-export { sortKey } from './record/sortKey';
-export { valueBy } from './record/valueBy';
-
-// rest
-export { Rest, rest, RestError, RestMethod, RestURL, RestResponse, RestParams, RestData, RestResponseType, RestOptions } from './rest/Rest';
-
-// stored
-export { getStored } from './stored/getStored';
-export { setStored } from './stored/setStored';
-
-// string
-export { camel } from './string/camel';
-export { clean } from './string/clean';
-export { firstLower } from './string/firstLower';
-export { firstUpper } from './string/firstUpper';
-export { pascal } from './string/pascal';
-export { words } from './string/words';
+export * from './number/bounds';
+export * from './number/diff';
+export * from './number/rand';
+export * from './number/round';
+export * from './promise/debounce';
+export * from './promise/retry';
+export * from './promise/sleep';
+export * from './promise/throttle';
+export * from './promise/TimeoutError';
+export * from './promise/withTimeout';
+export * from './record/deleteKey';
+export * from './record/groupBy';
+export * from './record/sortKey';
+export * from './record/valueBy';
+export * from './rest/Rest';
+export * from './stored/getStored';
+export * from './stored/setStored';
+export * from './string/camel';
+export * from './string/clean';
+export * from './string/firstLower';
+export * from './string/firstUpper';
+export * from './string/pascal';
+export * from './string/words';

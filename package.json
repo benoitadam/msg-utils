@@ -1,6 +1,6 @@
 {
   "name": "msg-utils",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "private": false,
   "description": "Several small practical and light tools.",
   "license": "MIT",
@@ -12,7 +12,10 @@
   "engines": {
     "node": ">=12.0.0"
   },
-  "files": ["dist","src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "repository": {
@@ -48,10 +51,16 @@
     "browser",
     "typescript"
   ],
+  "optionalDependencies": {
+    "@types/react": "^18.2.14",
+    "react": "^18.2.0",
+    "xmlhttprequest": "^1.8.0"
+  },
   "devDependencies": {
     "@types/jest": "^29.5.2",
     "@types/react": "^18.2.14",
     "esbuild": "^0.18.11",
+    "gulp": "^4.0.2",
     "jest": "^29.5.0",
     "prettier": "^2.8.8",
     "react": "^18.2.0",
@@ -60,9 +69,17 @@
   },
   "peerDependenciesMeta": {},
   "scripts": {
-    "build": "node ./build.mjs",
-    "pretest": "node ./build.mjs",
+    "clean": "node ./build.mjs clean",
+    "build": "node ./build.mjs clean build",
+    "pretest": "node ./build.mjs clean test",
     "test": "jest ./build/all.spec.js --verbose",
     "prettify": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,json}\""
+  },
+  "typesVersions": {
+    ">=4.2": {
+      "*": [
+        "src/*"
+      ]
+    }
   }
 }
