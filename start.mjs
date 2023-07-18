@@ -94,7 +94,7 @@ export async function publish() {
 }
 
 Promise.all(process.argv.map(async (arg) => {
-  const fun = { generate, clean, build, test }[arg];
+  const fun = { generate, clean, build, test, publish }[arg];
   if (fun) {
     const start = Date.now();
     console.debug(arg, 'start');
