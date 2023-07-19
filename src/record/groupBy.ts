@@ -39,7 +39,7 @@ const _groupBy = (items: any, key: any, val: any, add: any) => {
 
 export const groupBy = ((items: any, key: any, val?: any): Record<string, any[]> => {
   const r: Record<string, any[]> = {};
-  _groupBy(items, key, val, (k, v) => {
+  _groupBy(items, key, val, (k: any, v: any) => {
     (r[k] || (r[k] = [])).push(v);
   });
   return r;
@@ -47,7 +47,7 @@ export const groupBy = ((items: any, key: any, val?: any): Record<string, any[]>
 
 export const valueBy = ((items: any, key: any, val?: any): Record<string, any> => {
   const r: Record<string, any> = {};
-  _groupBy(items, key, val, (k, v) => {
+  _groupBy(items, key, val, (k: any, v: any) => {
     r[k] = v;
   });
   return r;

@@ -1,12 +1,25 @@
 import { exec as _exec } from 'node:child_process';
 import esbuild from 'esbuild';
-import path from 'node:path';
-import { promisify } from 'node:util';
-import { readdir, rm, stat, readFile, writeFile } from 'node:fs/promises';
+import { readdir, rm, stat, writeFile } from 'node:fs/promises';
 
 const GENERATED_MSG = '///// GENERATED FILE /////\n\n'
 
-const exec = promisify(_exec);
+const exec = (command) => new Promise((resolve, reject) => {
+  console.log('exec', command);
+  _exec(command, {
+    cwd: process.cwd(),
+    env: process.env
+  }, (error, stdout, stderr) => {
+    if (error) {
+      console.error('exec ERROR', command, error);
+      reject(error);
+      return;
+    }
+    console.log('stdout', stdout);
+    console.log('stderr', stderr);
+    resolve({ stdout, stderr });
+  });
+});
 
 async function esbuildBuild(outfile, options) {
   await esbuild.build({
@@ -58,24 +71,26 @@ export async function generate() {
 export async function clean() {
   await rm('build', { recursive: true }).catch(() => { });
   await rm('dist', { recursive: true }).catch(() => { });
+  await rm('lib', { recursive: true }).catch(() => { });
 }
 
 export async function build() {
-  console.debug('build');
+  console.debug('build', process.cwd());
 
   await clean();
   await generate();
-  await exec('npx tsc');
+  await exec('tsc -p tsconfig.json');
+  await exec('tsc -p tsconfig-cjs.json');
 
-  let typeTs = (await readFile('./dist/index.d.ts')).toString();
-  typeTs = typeTs.replace(/(}\r?\n)?declare module \"(.+)\" \{/g, '');
-  typeTs = 'declare module "msg-utils" {\n' + typeTs;
-  await writeFile('./dist/index.d.ts', typeTs);
+  // let typeTs = (await readFile('./dist/index.d.ts')).toString();
+  // typeTs = typeTs.replace(/(}\r?\n)?declare module \"(.+)\" \{/g, '');
+  // typeTs = 'declare module "msg-utils" {\n' + typeTs;
+  // await writeFile('./dist/index.d.ts', typeTs);
 
-  await esbuildBuild('./dist/index.js', {
-    // target: ['node12', 'chrome58', 'firefox57', 'safari11', 'edge16'],
-    // format: 'cjs'
-  });
+  // await esbuildBuild('./dist/index.js', {
+  //   // target: ['node12', 'chrome58', 'firefox57', 'safari11', 'edge16'],
+  //   // format: 'cjs'
+  // });
 }
 
 export async function test() {
@@ -85,6 +100,7 @@ export async function test() {
     sourcemap: true,
     entryPoints: ['test/all.spec.ts']
   });
+  await exec('jest ./build/all.spec.js --verbose');
 }
 
 export async function publish() {

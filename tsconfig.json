@@ -1,21 +1,13 @@
 {
-  "include": ["src/**/*"],
-  "exclude": ["src/**/index.ts"],
   "compilerOptions": {
-    "lib": ["esnext", "dom"],
-    "noImplicitAny": false,
-    "rootDir": "src",
-    "outFile": "dist/index.d.ts",
-    // "outDir": "dist2",
-    "module": "CommonJS",
-    "target": "esnext",
-    "declaration": true,
+    "target": "ES2020",
+    "module": "ES2020",
+    "moduleResolution": "NodeNext",
     "strict": true,
-    "moduleResolution": "Node",
-    "skipLibCheck": true,
     "esModuleInterop": true,
-    "emitDeclarationOnly": true,
-    "newLine": "lf",
-    "composite": true
-  }
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "outDir": "./lib/esm"
+  },
+  "include": ["src/**/*"]
 }

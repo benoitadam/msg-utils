@@ -62,3 +62,10 @@ Several small practical and light tools.
 ## rest
 ## stored
 ## string
+
+
+    "@types/react": "^18.2.14",
+    "@types/jest": "^29.5.2",
+    "jest": "^29.5.0",
+    "react": "^18.2.0",
+    "xmlhttprequest": "^1.8.0"

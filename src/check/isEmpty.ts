@@ -1,6 +1,6 @@
 import { isArray } from './isArray';
 
-const isRecordEmpty = (record) => {
+const isRecordEmpty = (record: any) => {
   for (const _ in record) return false;
   return true;
 };
