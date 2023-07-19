@@ -1,6 +1,6 @@
 {
   "name": "msg-utils",
-  "version": "0.1.64",
+  "version": "0.1.65",
   "private": false,
   "description": "Several small practical and light tools.",
   "license": "MIT",
@@ -64,12 +64,5 @@
     "test": "npm start test",
     "publish_package": "npm start publish",
     "prettify": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,json}\""
-  },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "src/*"
-      ]
-    }
   }
 }
