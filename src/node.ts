@@ -10,9 +10,9 @@ globalThis.XMLHttpRequest = XMLHttpRequest;
 
 const storage: { [key: string]: string } = {};
 (globalThis as any).localStorage = {
-    getItem: (key: string) => storage[key] || null,
-    removeItem: (key: string) => deleteKey(storage, key),
-    setItem: (key: string, value: string) => storage[key] = value,
+  getItem: (key: string) => storage[key] || null,
+  removeItem: (key: string) => deleteKey(storage, key),
+  setItem: (key: string, value: string) => (storage[key] = value),
 };
 
 export * from './array';
