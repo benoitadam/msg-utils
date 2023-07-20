@@ -63,11 +63,12 @@
   "peerDependenciesMeta": {},
   "scripts": {
     "start": "node ./start.mjs",
-    "clean": "npm start clean",
-    "build": "npm start clean build",
-    "test": "npm start clean test",
-    "generate": "npm start generate",
-    "publish_package": "npm start publish",
-    "prettify": "npm start prettify"
+    "test": "npm start test",
+    "_clean": "npm start clean",
+    "_build": "npm start build",
+    "_test": "npm start test",
+    "_generate": "npm start generate",
+    "_publish": "npm start publish",
+    "_prettify": "npm start prettify"
   }
 }
