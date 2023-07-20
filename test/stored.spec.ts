@@ -1,4 +1,4 @@
-import { deleteKey, getStored, setStored } from '../src';
+import { deleteKey, getStored, setStored } from '../src/node';
 
 describe('stored', () => {
   const storage: { [key: string]: string } = {};

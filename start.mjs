@@ -1,49 +1,35 @@
-import { exec as _exec } from 'node:child_process';
-import esbuild from 'esbuild';
+import { spawn } from 'node:child_process';
 import { readdir, rm, stat, writeFile } from 'node:fs/promises';
 
 const GENERATED_MSG = '///// GENERATED FILE /////\n\n'
 
-const exec = (command) => new Promise((resolve, reject) => {
-  console.log('exec', command);
-  _exec(command, {
-    cwd: process.cwd(),
-    env: process.env
-  }, (error, stdout, stderr) => {
-    if (error) {
-      console.error('exec ERROR', command, error);
-      reject(error);
-      return;
-    }
-    console.log('stdout', stdout);
-    console.log('stderr', stderr);
-    resolve({ stdout, stderr });
+async function shell(command) {
+  console.debug('shell', command);
+  const start = Date.now();
+  const [name, ...args] = command.split(' ');
+  await new Promise((resolve) => {
+    spawn(name, args, {
+      stdio: 'inherit',
+      cwd: undefined,
+      env: process.env,
+      shell: true
+    }).on('exit', resolve);
   });
-});
+  console.debug('shell time', Date.now() - start, 'ms');
+}
 
-async function esbuildBuild(outfile, options) {
-  await esbuild.build({
-    entryPoints: ['src/index.ts'],
-    outfile: outfile,
-    bundle: true,
-    minify: true,
-    treeShaking: true,
-    platform: 'node',
-    format: 'cjs',
-    external: [
-      'xmlhttprequest',
-      'node:crypto',
-    ],
-    ...options,
-  })
-    .then(async () => {
-      const size = await stat(outfile).then(s => s.size / 1000).catch(String);
-      console.debug('result', outfile, size);
-    })
-    .catch((error) => {
-      console.error('error', outfile, error);
-      process.exit(1);
-    });
+async function registers(funs) {
+  const commands = [...process.argv].splice(2);
+  if (commands.length === 0) commands.push('start');
+  console.debug('commands', commands);
+  for (const arg of commands) {
+    if (funs[arg]) {
+      const start = Date.now();
+      console.debug(arg, 'start');
+      await funs[arg]();
+      console.debug(arg, Date.now() - start, 'ms');
+    }
+  }
 }
 
 export async function generate() {
@@ -65,93 +51,34 @@ export async function generate() {
     // await writeFile(`${dir}.ts`, `${GENERATED_MSG}export * from './src/${dir}';\n`);
   }
 
-  await writeFile(`src/index.ts`, GENERATED_MSG + allFiles.map(f => `export * from './${f}';\n`).join(''));
+  // await writeFile(`src/index.ts`, GENERATED_MSG + allFiles.map(f => `export * from './${f}';\n`).join(''));
 }
 
 export async function clean() {
   await rm('build', { recursive: true }).catch(() => { });
-  await rm('dist', { recursive: true }).catch(() => { });
   await rm('lib', { recursive: true }).catch(() => { });
 }
 
 export async function build() {
-  console.debug('build', process.cwd());
-
   await clean();
-  await generate();
-  await exec('tsc -p tsconfig.json');
-  await exec('tsc -p tsconfig-cjs.json');
-
-  // let typeTs = (await readFile('./dist/index.d.ts')).toString();
-  // typeTs = typeTs.replace(/(}\r?\n)?declare module \"(.+)\" \{/g, '');
-  // typeTs = 'declare module "msg-utils" {\n' + typeTs;
-  // await writeFile('./dist/index.d.ts', typeTs);
-
-  // await esbuildBuild('./dist/index.js', {
-  //   // target: ['node12', 'chrome58', 'firefox57', 'safari11', 'edge16'],
-  //   // format: 'cjs'
-  // });
+  await shell('tsc -p tsconfig.json');
+  await shell('tsc -p tsconfig-cjs.json');
 }
 
 export async function test() {
   await clean();
-  await esbuildBuild('./build/all.spec.js', {
-    minify: false,
-    sourcemap: true,
-    entryPoints: ['test/all.spec.ts']
-  });
-  await exec('jest ./build/all.spec.js --verbose');
+  await shell('tsc -p tsconfig-test.json');
+  await shell('jest ./build/test/all.spec.js --verbose');
+}
+
+export async function prettify() {
+  await shell('prettier --write \"./src/**/*.{js,jsx,ts,tsx,json}\"');
+  await shell('prettier --write \"./test/**/*.{js,jsx,ts,tsx,json}\"');
 }
 
 export async function publish() {
-  await clean();
   await build();
-  await exec('npm publish --access public');
+  await shell('npm publish --access public');
 }
 
-Promise.all(process.argv.map(async (arg) => {
-  const fun = { generate, clean, build, test, publish }[arg];
-  if (fun) {
-    const start = Date.now();
-    console.debug(arg, 'start');
-    await fun();
-    console.debug(arg, Date.now() - start, 'ms');
-  }
-}));
-
-
-// build('build/all.spec.js', {
-//   ...nodeConfig,
-//   minify: false,
-//   sourcemap: true,
-//   entryPoints: ['test/all.spec.ts']
-// });
-
-
-
-
-
-
-
-
-
-
-// const nodeJs = ['node12'];
-// const newBrowsers = ['chrome61', 'firefox60', 'safari11', 'edge16'];
-// const oldBrowsers = ['chrome58', 'firefox57', 'safari11', 'edge16'];
-
-// build('dist/node.js', {
-//   ...nodeConfig
-// });
-
-// build('./dist/node-cjs.js', { target: nodeJs, format: 'cjs' });
-// build('./dist/browser-esm.js', { target: newBrowsers, format: 'esm' });
-// build('./dist/browser-cjs.js', { target: oldBrowsers, format: 'cjs' });
-
-// build('dist/index.js', {
-//   target: ['chrome58', 'firefox57', 'safari11', 'edge16'],
-// });
-
-// build('lib/index.esm.js', { format: 'esm', target: ['esnext'] });
-// build('lib/index.node.js', { platform: 'node', target: ['node12'] });
-// build('lib/index.node18.js', { platform: 'node', target: ['node18'] });
+registers({ generate, clean, build, test, prettify, publish });

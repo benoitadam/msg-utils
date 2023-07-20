@@ -1,4 +1,4 @@
-import { parseJson, getJson, cloneJson } from '../src';
+import { parseJson, getJson, cloneJson } from '../src/node';
 
 describe('json', () => {
   test(`cloneJson`, () => {

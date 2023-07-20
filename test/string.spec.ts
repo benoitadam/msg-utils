@@ -1,4 +1,4 @@
-import { firstUpper, firstLower, clean, words, pascal, camel } from '../src';
+import { firstUpper, firstLower, clean, words, pascal, camel } from '../src/node';
 
 describe('string', () => {
   test(`firstUpper`, () => {

@@ -1,4 +1,4 @@
-import { diff, debounce, retry, sleep, throttle, withTimeout } from '../src';
+import { diff, debounce, retry, sleep, throttle, withTimeout } from '../src/node';
 
 describe('promise', () => {
   debounce;

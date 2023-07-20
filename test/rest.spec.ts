@@ -1,8 +1,6 @@
-import { Rest, rest } from '../src';
+import { Rest, rest } from '../src/node';
 
 describe('request', () => {
-  globalThis.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
-
   test('constructor', () => {
     const r = new Rest({ baseUrl: 'test' });
     expect(r.options?.baseUrl).toEqual('test');
