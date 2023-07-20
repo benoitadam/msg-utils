@@ -61,6 +61,8 @@ export async function clean() {
 
 export async function build() {
   await clean();
+  await generate();
+  await prettify();
   await shell('tsc -p tsconfig.json');
   await shell('tsc -p tsconfig-cjs.json');
 }
