@@ -1,4 +1,4 @@
-import { bounds, diff, rand, round } from '../src/node';
+import { bounds, diff, rand, round } from '../src';
 
 describe('number', () => {
   test(`bounds`, () => {

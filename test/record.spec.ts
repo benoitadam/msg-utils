@@ -1,4 +1,4 @@
-import { deleteKey, groupBy, valueBy } from '../src/node';
+import { deleteKey, groupBy, valueBy } from '../src';
 
 describe('record', () => {
   const a = { id: 'a', p: 'pa', x: 0 };
@@ -7,6 +7,24 @@ describe('record', () => {
   const d = { id: 'd', p: 'pd', x: 2 };
   const items = [a, b, c, d];
   const record = { a, b, c, d };
+
+  test(`@example`, () => {
+    var isEqual = (a: any, b: any) => expect(a).toEqual(b);
+
+    var a = { x:5 }, b = { x:6 }, c = { x:6 };
+    isEqual( groupBy([ 5, 6, 6 ], v => v), { 5: [5], 6: [6, 6] } );
+    isEqual( groupBy([ 5, 6, 6 ], v => v, (v, i) => i), { 5: [0], 6: [1, 2] } );
+    isEqual( groupBy([ a, b, c ], v => v.x), { 5: [a], 6: [b, c] } );
+    isEqual( groupBy({ a, b, c }, null, v => v.x), { a: [5], b: [6], c: [6] } );
+    isEqual( groupBy([ a, b, c ]), groupBy({ 0:a, 1:b, 2:c }) );
+
+    var a = { x:5 }, b = { x:6 }, c = { x:6 };
+    isEqual( valueBy([ 5, 6, 6 ], v => v), { 5: 5, 6: 6 } );
+    isEqual( valueBy([ 5, 6, 6 ], v => v, (v, i) => i), { 5: 0, 6: 2 } );
+    isEqual( valueBy([ a, b, c ], v => v.x), { 5: a, 6: b } );
+    isEqual( valueBy({ a, b, c }, null, v => v.x), { a: 5, b: 6, c: 6 } );
+    isEqual( valueBy([ a, b, c ]), valueBy({ 0:a, 1:b, 2:c }) );
+  })
 
   // test(`byProp`, () => {
   //   const a = { id: 'ka', p: 'pa' };

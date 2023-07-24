@@ -1,4 +1,7 @@
-import { Rest, rest } from '../src/node';
+import { Rest, rest } from '../src';
+import XMLHttpRequest from 'xmlhttprequest-ssl';
+
+globalThis.XMLHttpRequest = XMLHttpRequest as any;
 
 describe('request', () => {
   test('constructor', () => {
@@ -8,7 +11,7 @@ describe('request', () => {
 
   test('xhr', () => {
     expect(!!XMLHttpRequest).toBe(true);
-    const xhr1 = new XMLHttpRequest();
+    const xhr1 = new globalThis.XMLHttpRequest();
     const xhr2 = rest.newXhr();
     expect(!!xhr1).toBe(true);
     expect(!!xhr2).toBe(true);

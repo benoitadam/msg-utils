@@ -1,4 +1,4 @@
-import { Msg, sleep } from '../src/node';
+import { Msg, sleep } from '../src';
 
 describe('Msg', () => {
   test(`Msg set and on off`, () => {

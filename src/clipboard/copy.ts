@@ -1,8 +1,8 @@
 import { getJson } from '../json/getJson';
-import { setStored } from '../stored/setStored';
+import { storage } from '../storage';
 
 export const copy = (value: any): Promise<void> => {
-  setStored('__clipboard', value);
+  storage.set('__copy', value);
   if (navigator && navigator.clipboard) {
     return navigator.clipboard.writeText(getJson(value, ''));
   }

@@ -7,5 +7,5 @@ import './msg.spec';
 import './promise.spec';
 import './record.spec';
 import './rest.spec';
-import './stored.spec';
+import './storage.spec';
 import './string.spec';

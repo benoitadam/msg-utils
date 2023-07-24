@@ -3,8 +3,7 @@ import { isFunction } from '../check/isFunction';
 import { isNotNull } from '../check/isNotNull';
 import { debounce } from '../promise/debounce';
 import { throttle } from '../promise/throttle';
-import { getStored } from '../stored/getStored';
-import { setStored } from '../stored/setStored';
+import { storage } from '../storage';
 import { IMsg, IMsgFilter, IMsgHandler, IMsgReadonly, IMsgSet, IMsgSubscription } from './types';
 
 export class Msg<T = any> implements IMsg<T> {
@@ -15,8 +14,8 @@ export class Msg<T = any> implements IMsg<T> {
     if (msg) return msg;
     msg = new Msg<T>(initValue, key);
     if (isStored) {
-      msg.set(getStored(key, initValue));
-      msg.on((val) => setStored(key, val));
+      msg.set(storage.get(key, initValue));
+      msg.on((val) => storage.set(key, val));
     }
     this.byKey[key] = msg;
     return msg;

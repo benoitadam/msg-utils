@@ -7,7 +7,7 @@ import {
   isNil,
   isString,
   isUuid,
-} from '../src/node';
+} from '../src';
 
 describe('check', () => {
   test(`isArray`, () => {

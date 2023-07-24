@@ -1,12 +1,12 @@
 import { parseJson } from '../json/parseJson';
-import { getStored } from '../stored/getStored';
+import { storage } from '../storage';
 
 export const paste = () => {
   if (navigator && navigator.clipboard) {
     return navigator.clipboard
       .readText()
       .then((v) => parseJson(v, v))
-      .catch(() => getStored('__clipboard'));
+      .catch(() => storage.get('__copy'));
   }
-  return Promise.resolve(getStored('__clipboard'));
+  return Promise.resolve(storage.get('__copy'));
 };
