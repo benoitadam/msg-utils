@@ -1,7 +1,7 @@
 import esbuild, { BuildOptions } from 'esbuild';
-import { spawn } from 'node:child_process';
 import { rm, stat, readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import { valueBy } from './record/groupBy';
+import { cmd } from './cmd';
 
 export interface BuildConfig extends BuildOptions {
   entryPoints: Record<string, string>;
@@ -56,15 +56,17 @@ export const DEFAULT_BUILD: BuildConfig = {
   target: ['node18'],
   define: DEFAULT_DEFINE,
   entryPoints: {
-    index: 'src/index.ts'
+    index: 'src/index.ts',
   },
   outExtension: {
-    '.js': '.mjs'
-  }
-}
+    '.js': '.mjs',
+  },
+};
 
 export const DEFAULT_CONFIG: BuilderConfig = {
-  version: `${NOW.getFullYear() - 2000}.${(NOW.getMonth() + 1) * 100 + NOW.getDate()}.${NOW.getHours() * 100 + NOW.getMinutes()}`,
+  version: `${NOW.getFullYear() - 2000}.${(NOW.getMonth() + 1) * 100 + NOW.getDate()}.${
+    NOW.getHours() * 100 + NOW.getMinutes()
+  }`,
   prefix: `${NOW.getTime().toString(16).substring(0, 8)}_`,
   time: NOW.getTime(),
   clean: ['dist'],
@@ -83,39 +85,25 @@ export const DEFAULT_CONFIG: BuilderConfig = {
     clean,
     build,
     serve,
-  } as Record<string, (...args: any[]) => void|Promise<void>>,
+  } as Record<string, (...args: any[]) => void | Promise<void>>,
   title: '',
 };
 
 export const BROWSER_CONFIG: BuilderConfig = {
-  ...DEFAULT_CONFIG
+  ...DEFAULT_CONFIG,
 };
 
 export const NODE_CONFIG: BuilderConfig = {
-  ...DEFAULT_CONFIG
+  ...DEFAULT_CONFIG,
 };
 
 let globalConfig = DEFAULT_CONFIG;
-
-export async function cmd(command: string) {
-  console.debug('cmd', command);
-  const [name, ...args] = command.split(' ');
-  await new Promise((resolve) => {
-    const cp = spawn(name, args, {
-      stdio: 'inherit',
-      cwd: process.cwd(),
-      env: process.env,
-      shell: true
-    });
-    cp.on('exit', () => resolve(cp));
-  });
-}
 
 export async function getConfig(config: BuildConfig): Promise<BuildConfig> {
   const { version, prefix, title } = globalConfig;
   return {
     ...config,
-    entryPoints: valueBy(config.entryPoints, key => prefix + key),
+    entryPoints: valueBy(config.entryPoints, (key) => prefix + key),
     define: {
       ...DEFAULT_DEFINE,
       __BUILD_TITLE: `"${title}"`,
@@ -128,21 +116,21 @@ export async function getConfig(config: BuildConfig): Promise<BuildConfig> {
 
 export async function buildIndexHtml({ define, outdir }: BuildConfig) {
   let html = DEFAULT_INDEX_HTML;
-  await readFile(`src/index.html`).then((buff) => html = String(buff)).catch(() => 0);
-  html = html.replace(/\{\{(.+)\}\}/g, (_, key) => JSON.parse((define||{})[key]));
+  await readFile(`src/index.html`)
+    .then((buff) => (html = String(buff)))
+    .catch(() => 0);
+  html = html.replace(/\{\{(.+)\}\}/g, (_, key) => JSON.parse((define || {})[key]));
   await mkdir(`${outdir}`, { recursive: true }).catch(() => 0);
   await writeFile(`${outdir}/index.html`, html);
 }
 
-export async function clean(paths: string|string[] = globalConfig.clean) {
+export async function clean(paths: string | string[] = globalConfig.clean) {
   if (!Array.isArray(paths)) paths = [paths];
   console.debug('clean', paths);
   for (const p of paths) {
     try {
-      if (p) await rm(p, { recursive: true })
-    }
-    catch (error) {
-    }
+      if (p) await rm(p, { recursive: true });
+    } catch (error) {}
   }
 }
 
@@ -163,7 +151,9 @@ export async function build(config: BuildConfig = globalConfig.build) {
 
   const files = await readdir(outdir);
   for (const file of files) {
-    const size = await stat(`${outdir}/${file}`).then(s => Math.round(s.size / 80) / 100).catch(() => 0);
+    const size = await stat(`${outdir}/${file}`)
+      .then((s) => Math.round(s.size / 80) / 100)
+      .catch(() => 0);
     console.debug('build', file, size, 'ko');
   }
 
@@ -181,8 +171,8 @@ export async function serve(config: BuildConfig = globalConfig.serve) {
     define: {
       ...globalConfig.serve.define,
       ...config.define,
-      __BUILD_SERVE: 'true'
-    }
+      __BUILD_SERVE: 'true',
+    },
   });
   console.debug('serve', buildConfig);
   const { babelEs5, host, port, ...options } = buildConfig;
@@ -198,9 +188,9 @@ export async function serve(config: BuildConfig = globalConfig.serve) {
     fallback: outdir + '/index.html',
     onRequest: (e) => {
       console.debug(e.method, e.path, e.status);
-    }
+    },
   });
-  console.debug('serve url', `http://${serveResult.host}:${serveResult.port}`)
+  console.debug('serve url', `http://${serveResult.host}:${serveResult.port}`);
 }
 
 export async function builder(config: BuilderConfig = BROWSER_CONFIG) {
@@ -210,7 +200,9 @@ export async function builder(config: BuilderConfig = BROWSER_CONFIG) {
   globalConfig = config;
   for (const arg of process.argv) {
     let [key, val] = arg.split(/:(.*)/);
-    try { val = eval(`(${val})`); } catch {}
+    try {
+      val = eval(`(${val})`);
+    } catch {}
     if (globalConfig.commands[key]) {
       const start = Date.now();
       console.log(arg, key, val);
@@ -221,7 +213,7 @@ export async function builder(config: BuilderConfig = BROWSER_CONFIG) {
 }
 
 (async () => {
-  const argv = valueBy(process.argv, k => k);
+  const argv = valueBy(process.argv, (k) => k);
   if (argv['browser']) await builder(BROWSER_CONFIG);
   if (argv['node']) await builder(NODE_CONFIG);
 })();

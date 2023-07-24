@@ -11,7 +11,7 @@ export interface IStore {
 export class Store implements IStore {
   data: Record<string, any> = {};
   getItem(key: string) {
-    return this.data[key] || null
+    return this.data[key] || null;
   }
   removeItem(key: string) {
     delete this.data[key];
