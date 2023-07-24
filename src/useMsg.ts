@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { IMsgReadonly } from '../msg/types';
+import type { IMsgReadonly } from './msg/types';
 
 interface UseMsg {
   <T = any>(msg: IMsgReadonly<T>): T;

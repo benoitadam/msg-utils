@@ -6,7 +6,6 @@ export * from './json';
 export * from './msg';
 export * from './number';
 export * from './promise';
-// export * from './react';
 export * from './record';
 export * from './rest';
 export * from './storage';
