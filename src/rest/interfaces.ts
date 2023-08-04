@@ -4,9 +4,9 @@ export type RParams = Record<string, undefined | string | number | (string | num
 export type RData = any;
 export type RHeaders = Record<string, string>;
 export type RBody = Document | XMLHttpRequestBodyInit | null | undefined;
-export type RResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";
+export type RResponseType = '' | 'arraybuffer' | 'blob' | 'document' | 'json' | 'text';
 
-export interface ROptions<T=any> {
+export interface ROptions<T = any> {
   url?: RURL;
   method?: RMethod;
   headers?: RHeaders;
@@ -20,12 +20,12 @@ export interface ROptions<T=any> {
   noCache?: boolean;
   xhr?: XMLHttpRequest;
   fetch?: (input: URL, init?: RequestInit) => Promise<Response>;
-  onResponse?: (response: Response, ctx: RContext<T>) => void|Promise<void>;
+  onResponse?: (response: Response, ctx: RContext<T>) => void | Promise<void>;
   onProgress?: (value: number, ctx: RContext<T>) => void;
   request?: <T>(ctx: RContext<T>) => Promise<T>;
-};
+}
 
-export interface RContext<T=any> {
+export interface RContext<T = any> {
   options: ROptions<T>;
 
   url: URL;
@@ -43,6 +43,6 @@ export interface RContext<T=any> {
 
   xhr: XMLHttpRequest;
   response?: Response;
-};
+}
 
 export type RSend = <T = any>(options: ROptions<T>, baseOptions?: ROptions<T>) => Promise<T>;

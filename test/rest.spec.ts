@@ -23,8 +23,8 @@ describe('rest', () => {
       ctx.data = parseJson(ctx.body);
       console.log('server.listener', ctx);
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.write(getJson(ctx)); 
-      res.end(); 
+      res.write(getJson(ctx));
+      res.end();
     });
   });
 
@@ -38,7 +38,7 @@ describe('rest', () => {
     const res = await fetch(BASE_URL);
     const data: any = await res.json();
 
-    expect(data?.method).toEqual("GET");
+    expect(data?.method).toEqual('GET');
   });
 
   test('constructor', () => {
@@ -48,12 +48,12 @@ describe('rest', () => {
 
   test('xhr get', async () => {
     const data = await rest.get(BASE_URL);
-    expect(data?.method).toEqual("GET");
+    expect(data?.method).toEqual('GET');
   });
 
   test('xhr post', async () => {
     const data = await rest.post(BASE_URL, { a: 2 });
-    expect(data?.method).toEqual("POST");
+    expect(data?.method).toEqual('POST');
     expect(data?.data?.a).toEqual(2);
   });
 
@@ -61,16 +61,16 @@ describe('rest', () => {
     const data = await rest.get(BASE_URL, {
       fetch,
       onResponse: (response, ctx) => {
-        expect(String(response)).toEqual("[object Response]");
+        expect(String(response)).toEqual('[object Response]');
         expect(response).toEqual(ctx.response);
-      }
+      },
     });
-    expect(data?.method).toEqual("GET");
+    expect(data?.method).toEqual('GET');
   });
 
   test('fetch post', async () => {
     const data = await rest.post(BASE_URL, { a: 2 }, { fetch });
-    expect(data?.method).toEqual("POST");
+    expect(data?.method).toEqual('POST');
     expect(data?.data?.a).toEqual(2);
   });
 });
