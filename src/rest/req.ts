@@ -146,15 +146,11 @@ export const req: RSend = (async <T = any>(
         // error: undefined,
     } as RContext<T>;
 
-    console.debug('req ctx', ctx);
-
     const request = o.request || (
         o.fetch ? reqFetch :
             (o.xhr || globalThis.XMLHttpRequest) ? reqXHR :
                 reqFetch
     );
-
-    console.debug('req request', request);
 
     await request(ctx as any);
 
@@ -162,9 +158,6 @@ export const req: RSend = (async <T = any>(
     if (ctx.data?.constructor?.name === 'Buffer' && ctx.responseType === 'json') {
         ctx.data = parseJson(ctx.data);
     }
-
-    console.debug('req response', ctx.response);
-    console.debug('req data', ctx.data);
 
     if (!ctx.ok || ctx.data === undefined) {
         throw new RestError(ctx);

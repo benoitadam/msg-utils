@@ -1,9 +1,8 @@
 import { spawn } from 'node:child_process';
 
-export async function cmd(command: string) {
-    console.debug('cmd', command);
+export const cmd = (command: string) => {
     const [name, ...args] = command.split(' ');
-    await new Promise((resolve) => {
+    return new Promise((resolve) => {
         const cp = spawn(name, args, {
             stdio: 'inherit',
             cwd: process.cwd(),

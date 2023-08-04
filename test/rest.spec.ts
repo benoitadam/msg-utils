@@ -4,7 +4,7 @@ import http from 'node:http';
 (globalThis as any).XMLHttpRequest = require('xmlhttprequest-ssl');
 (globalThis as any).fetch = require('node-fetch');
 
-const PORT = 9000;
+const PORT = 9497;
 const HOSTNAME = '127.0.0.1';
 const BASE_URL = `http://${HOSTNAME}:${PORT}`;
 
