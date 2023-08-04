@@ -3,36 +3,24 @@ import { readdir, rm, stat, writeFile } from 'node:fs/promises';
 
 const GENERATED_MSG = '///// GENERATED FILE /////\n\n'
 
-async function shell(command) {
-  console.debug('shell', command);
-  const start = Date.now();
+const argv = Object.fromEntries(process.argv.map(a => [a, true]));
+
+/** @returns {Promise<ChildProcess>} */
+function cmd(command) {
+  console.debug('cmd', command);
   const [name, ...args] = command.split(' ');
-  await new Promise((resolve) => {
-    spawn(name, args, {
+  return new Promise((resolve) => {
+    const cp = spawn(name, args, {
       stdio: 'inherit',
-      cwd: undefined,
+      cwd: process.cwd(),
       env: process.env,
-      shell: true
-    }).on('exit', resolve);
+      shell: true,
+    });
+    cp.on('exit', () => resolve(cp));
   });
-  console.debug('shell time', Date.now() - start, 'ms');
 }
 
-async function registers(funs) {
-  const commands = [...process.argv].splice(2);
-  if (commands.length === 0) commands.push('start');
-  console.debug('commands', commands);
-  for (const arg of commands) {
-    if (funs[arg]) {
-      const start = Date.now();
-      console.debug(arg, 'start');
-      await funs[arg]();
-      console.debug(arg, Date.now() - start, 'ms');
-    }
-  }
-}
-
-export async function generate() {
+if (argv.generate) {
   let allFiles = [];
   const dirs = await readdir('src');
 
@@ -54,33 +42,27 @@ export async function generate() {
   // await writeFile(`src/index.ts`, GENERATED_MSG + allFiles.map(f => `export * from './${f}';\n`).join(''));
 }
 
-export async function clean() {
+if (argv.clean || argv.build || argv.test || argv.release) {
   await rm('build', { recursive: true }).catch(() => { });
   await rm('lib', { recursive: true }).catch(() => { });
 }
 
-export async function build() {
-  await clean();
+if (argv.prettify) {
+  await cmd('prettier --write \"./src/**/*.{js,jsx,ts,tsx,json}\"');
+  await cmd('prettier --write \"./test/**/*.{js,jsx,ts,tsx,json}\"');
+}
+
+if (argv.build || argv.release) {
   await generate();
-  await prettify();
-  await shell('tsc -p tsconfig.json');
-  await shell('tsc -p tsconfig-cjs.json');
+  await cmd('tsc -p tsconfig.json');
+  await cmd('tsc -p tsconfig-cjs.json');
 }
 
-export async function test() {
-  await clean();
-  await shell('tsc -p tsconfig-test.json');
-  await shell('jest ./build/test/all.spec.js --verbose');
+if (argv.test || argv.release) {
+  await cmd('tsc -p tsconfig-test.json');
+  await cmd('jest ./build/test/all.spec.js --verbose');
 }
 
-export async function prettify() {
-  await shell('prettier --write \"./src/**/*.{js,jsx,ts,tsx,json}\"');
-  await shell('prettier --write \"./test/**/*.{js,jsx,ts,tsx,json}\"');
+if (argv.release) {
+  await cmd('npm publish --access public');
 }
-
-export async function publish() {
-  await build();
-  await shell('npm publish --access public');
-}
-
-registers({ generate, clean, build, test, prettify, publish });

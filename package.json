@@ -55,6 +55,7 @@
     "@types/react": "^18.2.15",
     "esbuild": "^0.18.11",
     "jest": "^29.6.1",
+    "node-fetch": "2",
     "prettier": "^2.8.8",
     "react": "^18.2.0",
     "typescript": "^5.1.3",
@@ -63,12 +64,11 @@
   "peerDependenciesMeta": {},
   "scripts": {
     "start": "node ./start.mjs",
+    "clean": "npm start clean",
+    "build": "npm start build",
     "test": "npm start test",
-    "_clean": "npm start clean",
-    "_build": "npm start build",
-    "_test": "npm start test",
-    "_generate": "npm start generate",
-    "_publish": "npm start publish",
-    "_prettify": "npm start prettify"
+    "release": "npm start release",
+    "generate": "npm start generate",
+    "prettify": "npm start prettify"
   }
 }
