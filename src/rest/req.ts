@@ -24,7 +24,7 @@ export class RestError<T = any> extends Error {
 export const reqXHR = <T = any>(ctx: RContext<T>): Promise<void> => {
   return new Promise((resolve) => {
     const o = ctx.options;
-    const xhr = ctx.xhr || (ctx.xhr = new registers.XMLHttpRequest!());
+    const xhr = ctx.xhr || (ctx.xhr = new registers.XMLHttpRequest());
 
     xhr.timeout = ctx.timeout || 20000;
     xhr.responseType = ctx.responseType || 'json';
@@ -77,7 +77,7 @@ export const reqFetch = async <T = any>(ctx: RContext<T>): Promise<void> => {
 
     if (ctx.timeout) options.signal = AbortSignal.timeout(ctx.timeout);
 
-    const response = await (o.fetch || registers.fetch!)(ctx.url, options);
+    const response = await (o.fetch || registers.fetch)(ctx.url, options);
     ctx.response = response;
     ctx.status = response.status;
     ctx.ok = response.ok;

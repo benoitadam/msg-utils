@@ -2,7 +2,9 @@
 
 Several small practical and light tools.
 
-## NodeJs Compat
+@vegi
+
+## NodeJs
 
 // uuid
 import crypto from 'node:crypto';
@@ -11,6 +13,13 @@ globalThis.crypto = crypto as Crypto;
 // Rest
 import XMLHttpRequest from 'xmlhttprequest-ssl';
 globalThis.XMLHttpRequest = XMLHttpRequest;
+
+import fetch from 'node-fetch';
+globalThis.fetch = fetch;
+
+## React
+
+registers.react = React;
 
 ## array
 ## cast

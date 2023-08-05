@@ -1,6 +1,6 @@
 {
-  "name": "vegi",
-  "version": "0.0.1",
+  "name": "msg-utils",
+  "version": "0.1.71",
   "private": false,
   "description": "Several small practical and light tools.",
   "license": "MIT",
@@ -13,10 +13,23 @@
     "node": ">=12.0.0"
   },
   "files": [
-    "lib/"
+    "lib/**/*",
+    "src/**/*"
   ],
   "main": "./lib/cjs/index.js",
-  "module": "./lib/esm/index.js",
+  "module": "./lib/index.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.mjs"
+      },
+      "require": {
+        "types": "./lib/cjs/index.d.ts",
+        "default": "./lib/cjs/index.js"
+      }
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/benoitadam/msg-utils.git"

@@ -1,7 +1,7 @@
 import { registers } from "../registers/registers";
 
 export const uuid = () => {
-  const { randomUUID, getRandomValues } = registers.crypto;
+  const { randomUUID, getRandomValues } = registers.crypto || {};
   if (randomUUID) return randomUUID;
   if (getRandomValues) {
     var buff = new Uint16Array(8);
