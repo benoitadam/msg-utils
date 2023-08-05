@@ -8,6 +8,6 @@ export * from './number';
 export * from './promise';
 export * from './record';
 export * from './rest';
-export * from './storage';
+export * from './storage/storage';
 export * from './string';
-export * from './uuid';
+export * from './string/uuid';

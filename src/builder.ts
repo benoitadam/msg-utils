@@ -1,7 +1,7 @@
 import esbuild, { BuildOptions } from 'esbuild';
 import { rm, stat, readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import { valueBy } from './record/groupBy';
-import { cmd } from './cmd';
+import { cmd } from './node/cmd';
 
 export interface BuildConfig extends BuildOptions {
   entryPoints: Record<string, string>;

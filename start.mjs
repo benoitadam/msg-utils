@@ -39,7 +39,7 @@ if (argv.generate) {
     // await writeFile(`${dir}.ts`, `${GENERATED_MSG}export * from './src/${dir}';\n`);
   }
 
-  // await writeFile(`src/index.ts`, GENERATED_MSG + allFiles.map(f => `export * from './${f}';\n`).join(''));
+  await writeFile(`src/index.ts`, GENERATED_MSG + allFiles.map(f => `export * from './${f}';\n`).join(''));
 }
 
 if (argv.clean || argv.build || argv.test || argv.release) {

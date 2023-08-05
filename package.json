@@ -1,6 +1,6 @@
 {
-  "name": "msg-utils",
-  "version": "0.1.70",
+  "name": "vegi",
+  "version": "0.0.1",
   "private": false,
   "description": "Several small practical and light tools.",
   "license": "MIT",
@@ -35,6 +35,9 @@
     "message",
     "record",
     "rest",
+    "api",
+    "fetch",
+    "fetch",
     "request",
     "stored",
     "string",

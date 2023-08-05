@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
-    "outDir": "./lib/esm"
+    "outDir": "./lib"
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "src/builder.ts"]
 }

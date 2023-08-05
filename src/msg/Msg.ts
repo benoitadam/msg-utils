@@ -3,7 +3,7 @@ import { isFunction } from '../check/isFunction';
 import { isNotNull } from '../check/isNotNull';
 import { debounce } from '../promise/debounce';
 import { throttle } from '../promise/throttle';
-import { storage } from '../storage';
+import { storage } from '../storage/storage';
 import { IMsg, IMsgFilter, IMsgHandler, IMsgReadonly, IMsgSet, IMsgSubscription } from './types';
 
 export class Msg<T = any> implements IMsg<T> {

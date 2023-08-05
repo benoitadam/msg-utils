@@ -1,5 +1,5 @@
 import { parseJson } from '../json/parseJson';
-import { storage } from '../storage';
+import { storage } from '../storage/storage';
 
 export const paste = () => {
   if (navigator && navigator.clipboard) {

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import type { IMsgReadonly } from './msg/types';
+import type { IMsgReadonly } from './types';
+import { registers } from '../registers/registers';
 
 interface UseMsg {
   <T = any>(msg: IMsgReadonly<T>): T;
@@ -7,7 +7,7 @@ interface UseMsg {
 }
 
 export const useMsg = (<T = any>(msg: IMsgReadonly<T> | null | undefined): T | undefined => {
-  const setState = useState(0)[1];
-  useEffect(() => msg?.on(() => setState((i) => i + 1)), [msg]);
+  const setState = registers.react.useState(0)[1];
+  registers.react.useEffect(() => msg?.on(() => setState((i: number) => i + 1)), [msg]);
   return msg ? msg.get() : undefined;
 }) as UseMsg;
