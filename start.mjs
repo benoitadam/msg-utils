@@ -57,7 +57,7 @@ if (argv.build || argv.release) {
   await cmd('tsc -p tsconfig-cjs.json');
 }
 
-if (argv.test || argv.release) {
+if (argv.test) {
   await cmd('tsc -p tsconfig-test.json');
   await cmd('jest ./build/test/all.spec.js --verbose --detectOpenHandles');
 }

@@ -1,4 +1,5 @@
 export interface IRegisters {
+    child_process?: { spawn: any; };
     crypto: Partial<Crypto>;
     react: any;
     localStorage: Storage;

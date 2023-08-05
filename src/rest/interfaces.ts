@@ -9,7 +9,7 @@ export type RResponseType = '' | 'arraybuffer' | 'blob' | 'document' | 'json' | 
 export interface ROptions<T = any> {
   url?: RURL;
   method?: RMethod;
-  headers?: RHeaders;
+  headers?: RHeaders|(() => RHeaders);
   baseUrl?: string;
   timeout?: number;
   params?: RParams;
@@ -20,7 +20,9 @@ export interface ROptions<T = any> {
   noCache?: boolean;
   xhr?: XMLHttpRequest;
   fetch?: (input: URL, init?: RequestInit) => Promise<Response>;
-  onResponse?: (response: Response, ctx: RContext<T>) => void | Promise<void>;
+  before?: (ctx: RContext<T>) => void | Promise<void>;
+  after?: (ctx: RContext<T>) => void | Promise<void>;
+  cast?: (ctx: RContext<T>) => T | Promise<T>;
   onProgress?: (value: number, ctx: RContext<T>) => void;
   request?: <T>(ctx: RContext<T>) => Promise<T>;
 }

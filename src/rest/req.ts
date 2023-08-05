@@ -46,16 +46,7 @@ export const reqXHR = <T = any>(ctx: RContext<T>): Promise<void> => {
       ctx.status = xhr.status;
       ctx.headers = {};
       ctx.ok = xhr.status < 400;
-
-      if (o.onResponse) {
-        try {
-          await o.onResponse(xhr.response, ctx);
-        } catch (error) {
-          ctx.error = error;
-          ctx.ok = false;
-        }
-      }
-
+      
       resolve();
     };
 
@@ -82,14 +73,18 @@ export const reqFetch = async <T = any>(ctx: RContext<T>): Promise<void> => {
     ctx.status = response.status;
     ctx.ok = response.ok;
 
-    if (o.onResponse) await o.onResponse(response, ctx);
+    if (o.cast) {
+      ctx.data = await o.cast(ctx);
+      return;
+    }
 
     switch (ctx.responseType) {
       case 'blob':
         ctx.data = (await response.blob()) as T;
         break;
       case 'json':
-        ctx.data = (await response.json()) as T;
+        const obj = (await response.json()) as T;
+        ctx.data = parseJson(obj, obj);
         break;
       case 'text':
         ctx.data = (await response.text()) as T;
@@ -153,19 +148,25 @@ export const req: RSend = async <T = any>(
     // error: undefined,
   } as RContext<T>;
 
-  const request =
-    o.request || (o.fetch ? reqFetch : o.xhr || globalThis.XMLHttpRequest ? reqXHR : reqFetch);
+  try {
 
-  await request(ctx as any);
+    if (o.before) await o.before(ctx);
 
-  // NodeJs Buffer
-  if (ctx.data?.constructor?.name === 'Buffer' && ctx.responseType === 'json') {
-    ctx.data = parseJson(ctx.data);
+    const request =
+      o.request || (o.fetch ? reqFetch : o.xhr || globalThis.XMLHttpRequest ? reqXHR : reqFetch);
+
+    await request(ctx as any);
+
+    if (o.cast) ctx.data = await o.cast(ctx);
+
+    if (o.after) await o.after(ctx);
+
+  } catch (error) {
+    ctx.error = error;
+    ctx.ok = false;
   }
 
-  if (!ctx.ok || ctx.data === undefined) {
-    throw new RestError(ctx);
-  }
+  if (ctx.error) throw new RestError(ctx);
 
   return ctx.data as T;
 };
