@@ -60,9 +60,8 @@ describe('rest', () => {
   test('fetch get', async () => {
     const data = await rest.get(BASE_URL, {
       fetch,
-      onResponse: (response, ctx) => {
-        expect(String(response)).toEqual('[object Response]');
-        expect(response).toEqual(ctx.response);
+      after: (ctx) => {
+        expect(String(ctx.response)).toEqual('[object Response]');
       },
     });
     expect(data?.method).toEqual('GET');

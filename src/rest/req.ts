@@ -152,8 +152,13 @@ export const req: RSend = async <T = any>(
 
     if (o.before) await o.before(ctx);
 
-    const request =
-      o.request || (o.fetch ? reqFetch : o.xhr || globalThis.XMLHttpRequest ? reqXHR : reqFetch);
+    const request = o.request || (
+      o.fetch ? reqFetch :
+      o.xhr ? reqXHR :
+      o.onProgress ? reqXHR :
+      (globalThis as any).fetch ? reqFetch :
+      reqXHR
+    );
 
     await request(ctx as any);
 
