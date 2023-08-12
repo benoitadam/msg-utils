@@ -1,39 +1,39 @@
 import { req } from './req';
-import { RURL, RData, ROptions } from './interfaces';
+import { RestURL, RestData, RestOptions } from './interfaces';
 
 export class Rest {
-  constructor(public options: Partial<ROptions> = {}) {}
+  constructor(public options: Partial<RestOptions> = {}) {}
 
-  req<T = any>(options: ROptions<T>) {
+  req<T = any>(options: RestOptions<T>) {
     return req<T>(options, this.options);
   }
 
-  get<T = any>(url: RURL, options: ROptions<T> = {}) {
+  get<T = any>(url: RestURL, options: RestOptions<T> = {}) {
     return this.req<T>({ url, method: 'GET', ...options });
   }
 
-  delete<T = any>(url: RURL, options: ROptions<T> = {}) {
+  delete<T = any>(url: RestURL, options: RestOptions<T> = {}) {
     return this.req<T>({ url, method: 'DELETE', ...options });
   }
 
-  post<T = any>(url: RURL, data?: RData, options: ROptions<T> = {}) {
+  post<T = any>(url: RestURL, data?: RestData, options: RestOptions<T> = {}) {
     return this.req<T>({ url, method: 'POST', data, ...options });
   }
 
-  patch<T = any>(url: RURL, data?: RData, options: ROptions<T> = {}) {
+  patch<T = any>(url: RestURL, data?: RestData, options: RestOptions<T> = {}) {
     return this.req<T>({ url, method: 'PATCH', data, ...options });
   }
 
-  put<T = any>(url: RURL, data?: RData, options: ROptions<T> = {}) {
+  put<T = any>(url: RestURL, data?: RestData, options: RestOptions<T> = {}) {
     return this.req<T>({ url, method: 'PUT', data, ...options });
   }
 
   upload<T = any>(
-    url: RURL,
+    url: RestURL,
     name: string,
     file: File,
     fileName?: string,
-    options: ROptions<T> = {},
+    options: RestOptions<T> = {},
   ) {
     const formData = new FormData();
     formData.append(name, file, fileName || file.name);

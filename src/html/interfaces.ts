@@ -1,0 +1,1 @@
+export type Cls = Record<string, boolean | number | undefined | null>;

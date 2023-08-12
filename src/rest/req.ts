@@ -3,10 +3,10 @@ import { isFunction } from '../check/isFunction';
 import { isString } from '../check/isString';
 import { getJson } from '../json/getJson';
 import { registers } from '../registers/registers';
-import { RSend, RContext, ROptions, RResponseType } from './interfaces';
+import { RestSend, RestContext, RestOptions, RestResponseType, RestHeaders } from './interfaces';
 
-const acceptJson = 'application/json; charset=utf-8';
-const acceptMap: Partial<Record<RResponseType, string>> = {
+const acceptJson = 'application/json';
+const acceptMap: Partial<Record<RestResponseType, string>> = {
   json: acceptJson,
   text: 'text/*; charset=utf-8',
   blob: '*/*',
@@ -16,19 +16,25 @@ const acceptMap: Partial<Record<RResponseType, string>> = {
 
 export class RestError<T = any> extends Error {
   name = 'RestError';
-  constructor(public ctx: RContext<T>) {
+  constructor(public ctx: RestContext<T>) {
     super(ctx.error?.message || ctx.status);
   }
 }
 
-export const reqXHR = <T = any>(ctx: RContext<T>): Promise<void> => {
-  return new Promise((resolve) => {
+export const reqXHR = async <T = any>(ctx: RestContext<T>): Promise<void> => {
+  try {
+    
     const o = ctx.options;
-    const xhr = ctx.xhr || (ctx.xhr = new registers.XMLHttpRequest());
+    const xhr = o.xhr || (o.xhr = new registers.XMLHttpRequest());
 
     xhr.timeout = ctx.timeout || 20000;
     xhr.responseType = ctx.responseType || 'json';
-    xhr.open(ctx.method, ctx.url);
+
+    if (o.cors) xhr.withCredentials = true;
+
+    xhr.open(ctx.method, ctx.url, true, o.username, o.password);
+
+    if (o.cors) xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
     for (const key in ctx.headers) {
       const val = ctx.headers[key];
@@ -40,35 +46,39 @@ export const reqXHR = <T = any>(ctx: RContext<T>): Promise<void> => {
       if (o.onProgress) o.onProgress(event.loaded / event.total, ctx);
     });
 
-    const cb = async () => {
-      ctx.data = xhr.response;
-      ctx.response = xhr.response;
-      ctx.status = xhr.status;
-      ctx.headers = {};
-      ctx.ok = xhr.status < 400;
-      
-      resolve();
-    };
+    if (o.before) await o.before(ctx);
+    await new Promise<void>((resolve) => {
+      const cb = async () => {
+        ctx.data = xhr.response;
+        ctx.response = xhr.response;
+        ctx.status = xhr.status;
+        ctx.headers = {};
+        ctx.ok = xhr.status < 400;
+        if (!ctx.ok) ctx.error = new Error(xhr.statusText);
+        resolve();
+      };
+      xhr.onloadend = xhr.onerror = xhr.ontimeout = xhr.onabort = cb;
+      xhr.send(ctx.body);
+    });
 
-    xhr.onloadend = cb;
-    xhr.onerror = cb;
-
-    xhr.send(ctx.body);
-  });
+  } catch (error) {
+    ctx.error = error;
+  }
 };
 
-export const reqFetch = async <T = any>(ctx: RContext<T>): Promise<void> => {
+export const reqFetch = async <T = any>(ctx: RestContext<T>): Promise<void> => {
   try {
     const o = ctx.options;
-    const options: RequestInit = {
+    const fetchRequest: RequestInit = ctx.fetchInit = {
       body: ctx.body as any,
       headers: ctx.headers,
       method: ctx.method,
     };
 
-    if (ctx.timeout) options.signal = AbortSignal.timeout(ctx.timeout);
+    if (ctx.timeout) fetchRequest.signal = AbortSignal.timeout(ctx.timeout);
 
-    const response = await (o.fetch || registers.fetch)(ctx.url, options);
+    if (o.before) await o.before(ctx);
+    const response = await (o.fetch || registers.fetch)(ctx.url, fetchRequest);
     ctx.response = response;
     ctx.status = response.status;
     ctx.ok = response.ok;
@@ -98,13 +108,13 @@ export const reqFetch = async <T = any>(ctx: RContext<T>): Promise<void> => {
   }
 };
 
-export const req: RSend = async <T = any>(
-  options: ROptions<T>,
-  baseOptions?: ROptions<T>,
+export const req: RestSend = async <T = any>(
+  options: RestOptions<T>,
+  baseOptions?: RestOptions<T>,
 ): Promise<T> => {
   const o = baseOptions ? { ...baseOptions, ...options } : options;
 
-  const headers = (isFunction(o.headers) ? o.headers() : o.headers) || {};
+  const headers: RestHeaders = {};
   const params = o.params || {};
   const responseType = o.responseType || 'json';
   const data = o.data;
@@ -117,9 +127,12 @@ export const req: RSend = async <T = any>(
     params.noCache = Date.now();
   }
 
-  if (data) headers['Content-Type'] = 'application/json; charset=utf-8';
+  if (data) headers['Content-Type'] = 'application/json';
 
   headers.Accept = acceptMap[responseType] || acceptJson;
+
+  const oHeaders = isFunction(o.headers) ? o.headers() : o.headers
+  if (oHeaders) Object.assign(headers, oHeaders);
 
   for (const key in params) {
     const v = params[key];
@@ -146,26 +159,13 @@ export const req: RSend = async <T = any>(
 
     // data: undefined,
     // error: undefined,
-  } as RContext<T>;
+  } as RestContext<T>;
 
   try {
-
-    if (o.before) await o.before(ctx);
-
-    const request = o.request || (
-      o.fetch ? reqFetch :
-      o.xhr ? reqXHR :
-      o.onProgress ? reqXHR :
-      (globalThis as any).fetch ? reqFetch :
-      reqXHR
-    );
-
+    const request = o.request || (!o.fetch && (o.xhr || registers.XMLHttpRequest)) ? reqXHR : reqFetch;
     await request(ctx as any);
-
     if (o.cast) ctx.data = await o.cast(ctx);
-
     if (o.after) await o.after(ctx);
-
   } catch (error) {
     ctx.error = error;
     ctx.ok = false;

@@ -1,41 +1,45 @@
-export type RURL = string | URL;
-export type RMethod = 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
-export type RParams = Record<string, undefined | string | number | (string | number)[]>;
-export type RData = any;
-export type RHeaders = Record<string, string>;
-export type RBody = Document | XMLHttpRequestBodyInit | null | undefined;
-export type RResponseType = '' | 'arraybuffer' | 'blob' | 'document' | 'json' | 'text';
+export type RestURL = string | URL;
+export type RestMethod = 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
+export type RestParams = Record<string, undefined | string | number | (string | number)[]>;
+export type RestData = any;
+export type RestHeaders = Record<string, string>;
+export type RestBody = Document | XMLHttpRequestBodyInit | null | undefined;
+export type RestResponseType = '' | 'arraybuffer' | 'blob' | 'document' | 'json' | 'text';
 
-export interface ROptions<T = any> {
-  url?: RURL;
-  method?: RMethod;
-  headers?: RHeaders|(() => RHeaders);
+export interface RestOptions<T = any> {
+  url?: RestURL;
+  method?: RestMethod;
+  headers?: RestHeaders|(() => RestHeaders);
   baseUrl?: string;
   timeout?: number;
-  params?: RParams;
-  data?: RData;
-  body?: RBody;
+  params?: RestParams;
+  data?: RestData;
+  body?: RestBody;
   formData?: FormData;
-  responseType?: RResponseType;
+  responseType?: RestResponseType;
   noCache?: boolean;
   xhr?: XMLHttpRequest;
   fetch?: (input: URL, init?: RequestInit) => Promise<Response>;
-  before?: (ctx: RContext<T>) => void | Promise<void>;
-  after?: (ctx: RContext<T>) => void | Promise<void>;
-  cast?: (ctx: RContext<T>) => T | Promise<T>;
-  onProgress?: (value: number, ctx: RContext<T>) => void;
-  request?: <T>(ctx: RContext<T>) => Promise<T>;
+  before?: (ctx: RestContext<T>) => void | Promise<void>;
+  after?: (ctx: RestContext<T>) => void | Promise<void>;
+  cast?: (ctx: RestContext<T>) => T | Promise<T>;
+  onProgress?: (progress: number, ctx: RestContext<T>) => void;
+  request?: <T>(ctx: RestContext<T>) => Promise<T>;
+
+  cors?: boolean;
+  password?: string | null;
+  username?: string | null;
 }
 
-export interface RContext<T = any> {
-  options: ROptions<T>;
+export interface RestContext<T = any> {
+  options: RestOptions<T>;
 
   url: URL;
-  method: RMethod;
-  responseType: RResponseType;
-  params: RParams;
-  headers: RHeaders;
-  body: RBody;
+  method: RestMethod;
+  responseType: RestResponseType;
+  params: RestParams;
+  headers: RestHeaders;
+  body: RestBody;
   timeout?: number;
   event?: any;
   status?: number;
@@ -43,8 +47,9 @@ export interface RContext<T = any> {
   data?: T;
   error?: any;
 
-  xhr: XMLHttpRequest;
+  xhr?: XMLHttpRequest;
   response?: Response;
+  fetchInit?: RequestInit;
 }
 
-export type RSend = <T = any>(options: ROptions<T>, baseOptions?: ROptions<T>) => Promise<T>;
+export type RestSend = <T = any>(options: RestOptions<T>, baseOptions?: RestOptions<T>) => Promise<T>;
