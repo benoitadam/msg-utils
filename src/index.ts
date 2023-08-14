@@ -28,7 +28,7 @@ export * from './cast/tryCatch';
 export * from './check/isArray';
 export * from './check/isDate';
 export * from './check/isEmpty';
-export * from './check/isEquals';
+export * from './check/isEqual';
 export * from './check/isFunction';
 export * from './check/isNil';
 export * from './check/isNotNull';
