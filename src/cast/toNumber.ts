@@ -25,5 +25,5 @@ interface ToNumber {
 export const toNumber = (<D>(v: any, nanVal?: D): number | D | undefined => {
   const clean = isString(v) ? v.replace(/,/g, '.').replace(/[^0-9\-\.]/g, '') : String(v);
   const nbr = clean !== '' ? Number(clean) : Number.NaN;
-  return Number.isNaN(nbr) ? nanVal : nbr;
+  return Number.isNaN(nbr) || !Number.isFinite(nbr) ? nanVal : nbr;
 }) as ToNumber;
