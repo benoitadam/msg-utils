@@ -32,6 +32,10 @@ describe('rest', () => {
     console.debug('server.listen');
   });
 
+  afterAll(async () => {
+    await new Promise(r => server.close(r));
+  });
+
   test('test-server', async () => {
     console.debug('server.req');
 
@@ -48,6 +52,7 @@ describe('rest', () => {
 
   test('xhr get', async () => {
     const data = await rest.get(BASE_URL);
+    console.debug('xhr get', data, String(data));
     expect(data?.method).toEqual('GET');
   });
 

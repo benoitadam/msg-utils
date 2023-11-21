@@ -27,7 +27,7 @@ export const reqXHR = async <T = any>(ctx: RestContext<T>): Promise<void> => {
     const xhr = o.xhr || (o.xhr = new registers.XMLHttpRequest());
 
     xhr.timeout = ctx.timeout || 20000;
-    xhr.responseType = ctx.responseType || 'json';
+    const responseType = (xhr.responseType = ctx.responseType || 'json');
 
     if (o.cors) xhr.withCredentials = true;
 
@@ -49,6 +49,8 @@ export const reqXHR = async <T = any>(ctx: RestContext<T>): Promise<void> => {
     await new Promise<void>((resolve) => {
       const cb = async () => {
         ctx.data = xhr.response;
+        if (responseType === 'text') ctx.data = String(ctx.data) as any;
+        if (responseType === 'json') ctx.data = parseJson(ctx.data, ctx.data) as any;
         ctx.response = xhr.response;
         ctx.status = xhr.status;
         ctx.headers = {};

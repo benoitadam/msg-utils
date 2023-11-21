@@ -6,6 +6,7 @@ describe('json', () => {
     expect(cloneJson('abcd')).toEqual('abcd');
     expect(cloneJson(a, { n: 2 }).n).toEqual(a.n);
     const b = cloneJson(a);
+    if (!b) throw new Error('no b');
     b.n = 2;
     expect(b).not.toEqual(a);
   });
