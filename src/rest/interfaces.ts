@@ -9,7 +9,7 @@ export type RestResponseType = '' | 'arraybuffer' | 'blob' | 'document' | 'json'
 export interface RestOptions<T = any> {
   url?: RestURL;
   method?: RestMethod;
-  headers?: RestHeaders|(() => RestHeaders);
+  headers?: RestHeaders | (() => RestHeaders);
   baseUrl?: string;
   timeout?: number;
   params?: RestParams;
@@ -52,4 +52,7 @@ export interface RestContext<T = any> {
   fetchInit?: RequestInit;
 }
 
-export type RestSend = <T = any>(options: RestOptions<T>, baseOptions?: RestOptions<T>) => Promise<T>;
+export type RestSend = <T = any>(
+  options: RestOptions<T>,
+  baseOptions?: RestOptions<T>,
+) => Promise<T>;

@@ -1,4 +1,4 @@
-import { fromEntries } from "../record/fromEntries";
+import { fromEntries } from '../record/fromEntries';
 
-export const getAttrs = (el: Element) => 
-    fromEntries(el.getAttributeNames().map(name => [name, el.getAttribute(name)]));
+export const getAttrs = (el: Element) =>
+  fromEntries(el.getAttributeNames().map((name) => [name, el.getAttribute(name)]));

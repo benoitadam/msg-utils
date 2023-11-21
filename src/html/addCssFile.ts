@@ -8,4 +8,4 @@ export const addCssFile = (url: string): HTMLLinkElement => {
   el.href = url;
   map[url] = document.head.appendChild(el);
   return el;
-}
+};

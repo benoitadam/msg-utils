@@ -13,4 +13,4 @@ export const setCss = (key: string, css?: string) => {
     document.head.appendChild(el);
     map[key] = { el, css };
   }
-}
+};

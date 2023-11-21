@@ -23,7 +23,6 @@ export class RestError<T = any> extends Error {
 
 export const reqXHR = async <T = any>(ctx: RestContext<T>): Promise<void> => {
   try {
-    
     const o = ctx.options;
     const xhr = o.xhr || (o.xhr = new registers.XMLHttpRequest());
 
@@ -60,7 +59,6 @@ export const reqXHR = async <T = any>(ctx: RestContext<T>): Promise<void> => {
       xhr.onloadend = xhr.onerror = xhr.ontimeout = xhr.onabort = cb;
       xhr.send(ctx.body);
     });
-
   } catch (error) {
     ctx.error = error;
   }
@@ -69,11 +67,11 @@ export const reqXHR = async <T = any>(ctx: RestContext<T>): Promise<void> => {
 export const reqFetch = async <T = any>(ctx: RestContext<T>): Promise<void> => {
   try {
     const o = ctx.options;
-    const fetchRequest: RequestInit = ctx.fetchInit = {
+    const fetchRequest: RequestInit = (ctx.fetchInit = {
       body: ctx.body as any,
       headers: ctx.headers,
       method: ctx.method,
-    };
+    });
 
     if (ctx.timeout) fetchRequest.signal = AbortSignal.timeout(ctx.timeout);
 
@@ -131,7 +129,7 @@ export const req: RestSend = async <T = any>(
 
   headers.Accept = acceptMap[responseType] || acceptJson;
 
-  const oHeaders = isFunction(o.headers) ? o.headers() : o.headers
+  const oHeaders = isFunction(o.headers) ? o.headers() : o.headers;
   if (oHeaders) Object.assign(headers, oHeaders);
 
   for (const key in params) {
@@ -162,7 +160,8 @@ export const req: RestSend = async <T = any>(
   } as RestContext<T>;
 
   try {
-    const request = o.request || (!o.fetch && (o.xhr || registers.XMLHttpRequest)) ? reqXHR : reqFetch;
+    const request =
+      o.request || (!o.fetch && (o.xhr || registers.XMLHttpRequest)) ? reqXHR : reqFetch;
     await request(ctx as any);
     if (o.cast) ctx.data = await o.cast(ctx);
     if (o.after) await o.after(ctx);

@@ -8,4 +8,4 @@ export const addJsFile = (url: string): HTMLScriptElement => {
   el.src = url;
   map[url] = document.head.appendChild(el);
   return el;
-}
+};
