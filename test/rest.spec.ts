@@ -33,7 +33,7 @@ describe('rest', () => {
   });
 
   afterAll(async () => {
-    await new Promise(r => server.close(r));
+    await new Promise((r) => server.close(r));
   });
 
   test('test-server', async () => {
