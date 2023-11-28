@@ -1,8 +1,8 @@
-import { registers } from '../registers/registers';
+import { getModule } from '../module/module';
 
 export const uuid = () => {
-  const { randomUUID, getRandomValues } = registers.crypto || {};
-  if (randomUUID) return randomUUID;
+  const { randomUUID, getRandomValues } = getModule('crypto') || {};
+  if (randomUUID) return randomUUID();
   if (getRandomValues) {
     var buff = new Uint16Array(8);
     getRandomValues(buff);

@@ -1,8 +1,5 @@
-import { Rest, getJson, parseJson, registers, rest } from '../src';
+import { Rest, getJson, parseJson, rest } from '../src';
 import http from 'node:http';
-
-registers.XMLHttpRequest = require('xmlhttprequest-ssl');
-registers.fetch = require('node-fetch');
 
 const PORT = Math.round(Math.random() * 10000);
 const HOSTNAME = '127.0.0.1';

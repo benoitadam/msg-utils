@@ -2,7 +2,7 @@ import { isRecord, parseJson } from '..';
 import { isFunction } from '../check/isFunction';
 import { isString } from '../check/isString';
 import { getJson } from '../json/getJson';
-import { registers } from '../registers/registers';
+import { getModule } from '../module/module';
 import { RestSend, RestContext, RestOptions, RestResponseType, RestHeaders } from './interfaces';
 
 const acceptJson = 'application/json';
@@ -24,7 +24,8 @@ export class RestError<T = any> extends Error {
 export const reqXHR = async <T = any>(ctx: RestContext<T>): Promise<void> => {
   try {
     const o = ctx.options;
-    const xhr = o.xhr || (o.xhr = new registers.XMLHttpRequest());
+    const _XMLHttpRequest = getModule('XMLHttpRequest');
+    const xhr: XMLHttpRequest = o.xhr || (o.xhr = new _XMLHttpRequest());
 
     xhr.timeout = ctx.timeout || 20000;
     const responseType = (xhr.responseType = ctx.responseType || 'json');
@@ -78,7 +79,7 @@ export const reqFetch = async <T = any>(ctx: RestContext<T>): Promise<void> => {
     if (ctx.timeout) fetchRequest.signal = AbortSignal.timeout(ctx.timeout);
 
     if (o.before) await o.before(ctx);
-    const response = await (o.fetch || registers.fetch)(ctx.url, fetchRequest);
+    const response = await (o.fetch || getModule('fetch'))(ctx.url, fetchRequest);
     ctx.response = response;
     ctx.status = response.status;
     ctx.ok = response.ok;
@@ -163,7 +164,7 @@ export const req: RestSend = async <T = any>(
 
   try {
     const request =
-      o.request || (!o.fetch && (o.xhr || registers.XMLHttpRequest)) ? reqXHR : reqFetch;
+      o.request || (!o.fetch && (o.xhr || getModule('XMLHttpRequest'))) ? reqXHR : reqFetch;
     await request(ctx as any);
     if (o.cast) ctx.data = await o.cast(ctx);
     if (o.after) await o.after(ctx);

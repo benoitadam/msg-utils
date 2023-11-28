@@ -4,6 +4,7 @@ import './check.spec';
 import './json.spec';
 import './number.spec';
 import './msg.spec';
+import './node.spec';
 import './promise.spec';
 import './record.spec';
 import './rest.spec';

@@ -55,8 +55,8 @@ export class Msg<T = any> implements IMsg<T> {
     return this.v;
   }
 
-  set(value: T) {
-    if (value !== this.v) {
+  set(value: T, ignoreEqual?: boolean) {
+    if (ignoreEqual || value !== this.v) {
       const old = this.v;
       this.v = value;
       this.h.forEach((h) => h(this.v, old));
@@ -64,8 +64,8 @@ export class Msg<T = any> implements IMsg<T> {
     return this;
   }
 
-  next(value: T | ((value: T) => T)) {
-    return this.set(isFunction(value) ? value(this.v) : value);
+  next(value: T | ((value: T) => T), ignoreEqual?: boolean) {
+    return this.set(isFunction(value) ? value(this.v) : value, ignoreEqual);
   }
 
   subscribe(handler: (next: T) => void): IMsgSubscription {
