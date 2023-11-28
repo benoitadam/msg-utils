@@ -1,7 +1,7 @@
 const g = globalThis as any;
 
 export const modules: Record<string, any> = {};
-export const moduleFallbacks: Record<string, string|(() => any)> = {
+export const moduleFallbacks: Record<string, string | (() => any)> = {
   XMLHttpRequest: 'xmlhttprequest-ssl',
   fetch: 'node-fetch',
   react: 'React',
@@ -14,22 +14,20 @@ export const getModule = (key: string): any => {
   if (module) return module;
 
   module = g[key];
-  if (module) return modules[key] = module;
+  if (module) return (modules[key] = module);
 
   try {
     module = _require(key);
-    if (module) return modules[key] = module;
-  }
-  catch (error) {}
+    if (module) return (modules[key] = module);
+  } catch (error) {}
 
   const fallback = moduleFallbacks[key];
   try {
     if (fallback) {
       module = typeof fallback === 'string' ? getModule(fallback) : fallback();
-      if (module) return modules[key] = module;
+      if (module) return (modules[key] = module);
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.warn('module fallback', key, fallback);
   }
 

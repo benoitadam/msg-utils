@@ -10,7 +10,7 @@ describe('node', () => {
 
     const catResult = await cmd('cat {name}.{ext}', { name: 'package', ext: 'json' });
     const packageValue = parseJson(String(catResult));
-    expect(typeof packageValue).toBe("object");
-    expect(typeof packageValue.name).toBe("string");
+    expect(typeof packageValue).toBe('object');
+    expect(typeof packageValue.name).toBe('string');
   });
 });
