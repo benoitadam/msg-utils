@@ -1,24 +1,9 @@
-import { spawn } from 'node:child_process';
+import { execSync } from 'node:child_process';
 import { readdir, rm, stat, writeFile } from 'node:fs/promises';
 
 const GENERATED_MSG = '///// GENERATED FILE /////\n\n'
 
 const argv = Object.fromEntries(process.argv.map(a => [a, true]));
-
-/** @returns {Promise<ChildProcess>} */
-function cmd(command) {
-  console.debug('cmd', command);
-  const [name, ...args] = command.split(' ');
-  return new Promise((resolve) => {
-    const cp = spawn(name, args, {
-      stdio: 'inherit',
-      cwd: process.cwd(),
-      env: process.env,
-      shell: true,
-    });
-    cp.on('exit', () => resolve(cp));
-  });
-}
 
 if (argv.generate) {
   let allFiles = [];
@@ -48,20 +33,20 @@ if (argv.clean || argv.build || argv.test || argv.release) {
 }
 
 if (argv.prettify) {
-  await cmd('prettier --write \"./src/**/*.{js,jsx,ts,tsx,json}\"');
-  await cmd('prettier --write \"./test/**/*.{js,jsx,ts,tsx,json}\"');
+  execSync('prettier --write \"./src/**/*.{js,jsx,ts,tsx,json}\"');
+  execSync('prettier --write \"./test/**/*.{js,jsx,ts,tsx,json}\"');
 }
 
 if (argv.build || argv.release) {
-  await cmd('tsc -p tsconfig.json');
-  await cmd('tsc -p tsconfig-cjs.json');
+  execSync('tsc -p tsconfig.json');
+  execSync('tsc -p tsconfig-cjs.json');
 }
 
 if (argv.test) {
-  await cmd('tsc -p tsconfig-test.json');
-  await cmd('jest ./build/test/all.spec.js --verbose --detectOpenHandles');
+  execSync('tsc -p tsconfig-test.json');
+  execSync('jest ./build/test/all.spec.js --verbose --detectOpenHandles');
 }
 
 if (argv.release) {
-  await cmd('npm publish --access public');
+  execSync('npm publish --access public');
 }
