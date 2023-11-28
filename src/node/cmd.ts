@@ -1,6 +1,7 @@
 import type { SpawnOptions, ChildProcess, spawn } from 'child_process';
 import type { Readable } from 'stream';
-import { Msg } from '..';
+import { Msg } from '../msg/Msg';
+import { getModule } from '../module';
 
 export type CmdValues = Record<string, any>;
 
@@ -87,7 +88,7 @@ export class Cmd {
     const { encoding, env, timeout, ...spawnOptions } = options || {};
     let args = String(command).split(' ');
     if (inputs) args = args.map((a) => a.replace(/\{(\w+)\}/g, (s, k) => String(inputs[k]) || s));
-    const nodeSpawn: typeof spawn = require('child_process').spawn;
+    const nodeSpawn: typeof spawn = getModule('child_process').spawn;
     const { stdout, stderr } = (this.cp = nodeSpawn(args.shift() || '', args, {
       //stdio: 'inherit',
       stdio: 'pipe',

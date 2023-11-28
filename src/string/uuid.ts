@@ -1,4 +1,4 @@
-import { getModule } from '../module/module';
+import { getModule } from '../module';
 
 export const uuid = () => {
   const { randomUUID, getRandomValues } = getModule('crypto') || {};

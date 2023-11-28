@@ -1,5 +1,5 @@
 import type { IMsgReadonly } from './types';
-import { getModule } from '../module/module';
+import { getModule } from '../module';
 
 interface UseMsg {
   <T = any>(msg: IMsgReadonly<T>): T;

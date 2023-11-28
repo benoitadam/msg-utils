@@ -3,7 +3,7 @@
 /// <reference types="node" />
 import type { SpawnOptions, ChildProcess } from 'child_process';
 import type { Readable } from 'stream';
-import { Msg } from '..';
+import { Msg } from '../msg/Msg';
 export type CmdValues = Record<string, any>;
 export interface CmdOptions extends SpawnOptions {
     encoding?: BufferEncoding;

@@ -1,7 +1,7 @@
 import { isNil } from '../check/isNil';
 import { getJson } from '../json/getJson';
 import { parseJson } from '../json/parseJson';
-import { getModule, moduleFallbacks } from '../module/module';
+import { getModule, moduleAlias } from '../module';
 import { IStore } from './IStore';
 import { Store } from './Store';
 
@@ -9,7 +9,7 @@ export class Storage {
   public store: IStore;
 
   constructor(store?: IStore) {
-    moduleFallbacks.localStorage = () => new Store();
+    moduleAlias.localStorage = () => new Store();
     this.store = store || getModule('localStorage');
   }
 

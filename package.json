@@ -73,6 +73,7 @@
     "test": "npm start test",
     "release": "npm start release",
     "generate": "npm start generate",
-    "prettify": "npm start prettify"
+    "prettify": "npm start prettify",
+    "push-upstream": "git push upstream"
   }
 }

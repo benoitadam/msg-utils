@@ -1,3 +1,5 @@
 ///// GENERATED FILE /////
 
-export * from './module';
+export * from './getModule';
+export * from './moduleAlias';
+export * from './modules';

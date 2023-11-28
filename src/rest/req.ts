@@ -2,7 +2,7 @@ import { isRecord, parseJson } from '..';
 import { isFunction } from '../check/isFunction';
 import { isString } from '../check/isString';
 import { getJson } from '../json/getJson';
-import { getModule } from '../module/module';
+import { getModule } from '../module';
 import { RestSend, RestContext, RestOptions, RestResponseType, RestHeaders } from './interfaces';
 
 const acceptJson = 'application/json';
