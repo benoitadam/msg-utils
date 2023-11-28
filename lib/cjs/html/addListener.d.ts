@@ -1,0 +1,1 @@
+export declare const addListener: <K extends keyof HTMLElementEventMap>(element: HTMLElement | 0, type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions) => (() => void);
