@@ -105,6 +105,7 @@ export class Cmd {
     return new Promise((resolve, reject) => {
       const { timeout } = this.options;
       // this.cp.on('exit', () => resolve(this));
+      // this.cp.stdout?.on('end', () => resolve(this));
       this.cp.on('close', () => resolve(this));
       this.cp.on('error', (error) => reject((this.error = error)));
       if (timeout) {

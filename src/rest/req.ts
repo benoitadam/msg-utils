@@ -1,4 +1,5 @@
 import { isRecord, parseJson } from '..';
+import { toFormData } from '../cast/toFormData';
 import { isFunction } from '../check/isFunction';
 import { isString } from '../check/isString';
 import { getJson } from '../json/getJson';
@@ -120,6 +121,9 @@ export const req: RestSend = async <T = any>(
   const responseType = o.responseType || 'json';
   const data = o.data;
   const url = new URL(o.url || '', o.baseUrl);
+  const method = (o.method || 'GET').toUpperCase();
+  const timeout = o.timeout;
+  const formData = toFormData(o.formData);
 
   if (o.noCache) {
     headers['Cache-Control'] = 'no-cache, no-store, max-age=0';
@@ -129,37 +133,34 @@ export const req: RestSend = async <T = any>(
   }
 
   if (data) headers['Content-Type'] = 'application/json';
+  // if (formData) headers['Content-Type'] = headers['Process-Data'] = 'multipart/form-data';
 
   headers.Accept = acceptMap[responseType] || acceptJson;
 
-  const oHeaders = isFunction(o.headers) ? o.headers() : o.headers;
-  if (oHeaders) Object.assign(headers, oHeaders);
+  const assignHeaders = (base: RestHeaders, value?: RestHeaders | (() => RestHeaders)) => {
+    if (value) Object.assign(base, isFunction(value) ? value() : value);
+  };
+
+  assignHeaders(headers, baseOptions?.headers);
+  assignHeaders(headers, options.headers);
 
   for (const key in params) {
     const v = params[key];
     url.searchParams.set(key, isString(v) ? v : getJson(v, String(v)));
   }
 
-  const body = o.body || data ? getJson(data) : o.formData;
+  const body = o.body || formData || getJson(data);
 
   const ctx = {
     options,
-
     url,
-    method: (o.method || 'GET').toUpperCase(),
+    method,
     responseType,
     params,
     headers,
     body,
-    timeout: o.timeout,
-
-    // event: undefined,
-    // response: undefined,
-    // status: undefined,
+    timeout,
     ok: false,
-
-    // data: undefined,
-    // error: undefined,
   } as RestContext<T>;
 
   try {

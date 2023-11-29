@@ -1,5 +1,6 @@
 import { req } from './req';
 import { RestURL, RestData, RestOptions } from './interfaces';
+import { toFormData } from '../cast/toFormData';
 
 export class Rest {
   constructor(public options: Partial<RestOptions> = {}) {}
@@ -35,7 +36,7 @@ export class Rest {
     fileName?: string,
     options: RestOptions<T> = {},
   ) {
-    const formData = new FormData();
+    const formData = toFormData({});
     formData.append(name, file, fileName || file.name);
     return this.req<T>({ url, method: 'POST', formData, ...options });
   }
