@@ -10,6 +10,7 @@ export * from './toArray';
 export * from './toBoolean';
 export * from './toDate';
 export * from './toError';
+export * from './toFormData';
 export * from './toNull';
 export * from './toNumber';
 export * from './toRecord';

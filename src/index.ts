@@ -20,6 +20,7 @@ export * from './cast/toArray';
 export * from './cast/toBoolean';
 export * from './cast/toDate';
 export * from './cast/toError';
+export * from './cast/toFormData';
 export * from './cast/toNull';
 export * from './cast/toNumber';
 export * from './cast/toRecord';
