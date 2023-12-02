@@ -15,7 +15,7 @@ export interface RestOptions<T = any> {
   params?: RestParams;
   data?: RestData;
   body?: RestBody;
-  formData?: FormData;
+  formData?: Record<string, any>|FormData;
   responseType?: RestResponseType;
   noCache?: boolean;
   xhr?: XMLHttpRequest;

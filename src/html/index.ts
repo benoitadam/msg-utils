@@ -15,3 +15,4 @@ export * from './setCss';
 export * from './setEl';
 export * from './setSiteTitle';
 export * from './setStyle';
+export * from './swClear';

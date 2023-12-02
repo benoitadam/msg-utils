@@ -8,6 +8,7 @@ export * from './rec';
 export * from './str';
 export * from './toArray';
 export * from './toBoolean';
+export * from './toClassName';
 export * from './toDate';
 export * from './toError';
 export * from './toFormData';
