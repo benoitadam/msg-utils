@@ -1,6 +1,6 @@
 interface TryCatch {
-    <T = any>(v: () => any): T | undefined;
-    <T = any, U = any>(v: () => any, def: U): T | U;
+    <T = any>(funOrVal: T | (() => T)): T | undefined;
+    <T = any, U = any>(funOrVal: T | (() => T), catchOrVal: U | (() => U)): T | U;
 }
 export declare const tryCatch: TryCatch;
 export {};

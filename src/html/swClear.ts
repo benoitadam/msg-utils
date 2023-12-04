@@ -1,2 +1,2 @@
 export const swClear = () => navigator.serviceWorker.getRegistrations()
-    .then(rs => rs.forEach(r => r.unregister()));
+    .then(rs => Promise.all(rs.map(r => r.unregister())));
