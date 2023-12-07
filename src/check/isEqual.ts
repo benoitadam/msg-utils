@@ -1,4 +1,5 @@
 import { getJson } from '../json/getJson';
+import { getKeys } from '../record/getKeys';
 import { isRecord } from './isRecord';
 
 export const isEqual = (a: any, b: any) => {
@@ -12,7 +13,7 @@ export const isEqual = (a: any, b: any) => {
   }
   if (a instanceof Object) {
     if (!isRecord(b)) return false;
-    if (Object.keys(a).length !== Object.keys(b).length) return false;
+    if (getKeys(a).length !== getKeys(b).length) return false;
     for (const prop in a) if (!isEqual(a[prop], b[prop])) return false;
     return true;
   }

@@ -1,30 +1,24 @@
-import { cmd, env, parseJson, toString, toBoolean, toNumber, toRecord, tryCatch } from '../src';
+import { cmd, env, parseJson, toString, toBoolean, toNumber, toRecord, tryCatch, envNumber, envBoolean, envJson } from '../src';
 
 describe('node', () => {
   test('env', () => {
     process.env.envString = 'titi';
     process.env.envNumber = '5';
     process.env.envBoolean = 'true';
-    process.env.envRecord = '{ a:1 }';
+    process.env.envJson = '{ "a":1 }';
     process.env.envNotNumber = 'b';
     process.env.envNotBoolean = 'a';
-    process.env.envNotRecord = '5';
+    process.env.envNotJson = '5';
 
-    expect(env('envString', toString)).toEqual('toto');
-    expect(env('envNumber', toNumber)).toEqual(5);
-    expect(env('envBoolean', toBoolean)).toEqual(true);
-    expect(env('envRecord', toRecord)).toEqual({ a:1 });
+    expect(env('envString')).toEqual('titi');
+    expect(envNumber('envNumber')).toEqual(5);
+    expect(envBoolean('envBoolean')).toEqual(true);
+    expect(envJson('envJson')).toEqual({ a:1 });
 
-    const n = env('envNotNumber', toNumber);
-
-    tryCatch(() => env('envNotNumber', toNumber), "error").toEqual("error");
-    tryCatch(() => env('envNotBoolean', toBoolean), "error").toEqual("error");
-    tryCatch(() => env('envNotRecord', toRecord), "error").toEqual("error");
-    
-    const nbr = env('envNotNumber', toNumber, 5);
-    tryCatch(() => , "error").toEqual(5);
-    tryCatch(() => env('envNotBoolean', toBoolean), "error").toEqual("error");
-    tryCatch(() => env('envNotRecord', toRecord), "error").toEqual("error");
+    try { env('envNotString'); expect(1).toEqual(0); } catch(e) {}
+    try { envNumber('envNotNumber'); expect(1).toEqual(0); } catch(e) {}
+    try { envBoolean('envNotBoolean'); expect(1).toEqual(0); } catch(e) {}
+    try { envJson('envNotJson'); expect(1).toEqual(0); } catch(e) {}
   });
 
   test(`cmd`, async () => {

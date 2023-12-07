@@ -1,4 +1,4 @@
-import { deleteKey, groupBy, valueBy } from '../src';
+import { deleteKey, groupBy, valueBy, getChanges, merge } from '../src';
 
 describe('record', () => {
   const a = { id: 'a', p: 'pa', x: 0 };
@@ -116,5 +116,13 @@ describe('record', () => {
     ).toEqual({ 0: 'pb', 1: 'pc', 2: 'pd' });
     expect(valueBy(record, (i) => i.x)).toEqual({ 0: b, 1: c, 2: d });
     expect(valueBy(record, null, (i) => i.x)).toEqual({ a: 0, b: 0, c: 1, d: 2 });
+  });
+
+  test(`getChanges`, () => {
+    expect(getChanges({ a:1 }, { a:1, b:2 })).toEqual({ b:2 });
+  });
+
+  test(`merge`, () => {
+    expect(merge({ a:1 }, { b:2 })).toEqual({ a:1, b:2 });
   });
 });

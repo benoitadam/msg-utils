@@ -1,7 +1,7 @@
 import { Rest, getJson, parseJson, rest } from '../src';
 import http from 'node:http';
 
-const PORT = Math.round(Math.random() * 10000);
+const PORT = Math.round(Math.random() * 10000 + 1000);
 const HOSTNAME = '127.0.0.1';
 const BASE_URL = `http://${HOSTNAME}:${PORT}`;
 

@@ -2,7 +2,7 @@ import { isRecord } from '../check/isRecord';
 import { isArray } from '../check/isArray';
 import { isFunction } from '../check/isFunction';
 import { isNil } from '../check/isNil';
-import { entries } from './entries';
+import { getEntries } from './getEntries';
 
 export type ArRecKey<T> = undefined | null | keyof T | ((item: T, index: number) => any);
 export type ArRecVal<T, U> = undefined | null | keyof T | ((item: T, index: number) => U);
@@ -32,7 +32,7 @@ const _groupBy = (items: any, key: any, val: any, add: any) => {
     });
   }
   if (isRecord(items)) {
-    entries(items).forEach(([key, val]) => {
+    getEntries(items).forEach(([key, val]) => {
       add(getK(val, key), getV(val, key));
     });
   }
