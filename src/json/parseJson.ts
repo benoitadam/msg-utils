@@ -1,3 +1,4 @@
+import { isNotNull } from '..';
 import { tryCatch } from '../cast/tryCatch';
 
 interface ParseJson {
@@ -6,4 +7,4 @@ interface ParseJson {
 }
 
 export const parseJson = (<T, U>(v: any, def?: U): T | U | undefined =>
-  tryCatch(() => JSON.parse(v) as T, def)) as ParseJson;
+  tryCatch(() => isNotNull(v) ? JSON.parse(v) as T : def, def)) as ParseJson;
