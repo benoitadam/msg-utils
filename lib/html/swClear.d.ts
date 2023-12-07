@@ -1,1 +1,1 @@
-export declare const swClear: () => Promise<void>;
+export declare const swClear: () => Promise<boolean[]>;
