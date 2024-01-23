@@ -1,4 +1,16 @@
-import { cmd, env, parseJson, toString, toBoolean, toNumber, toRecord, tryCatch, envNumber, envBoolean, envJson } from '../src';
+import {
+  cmd,
+  env,
+  parseJson,
+  toString,
+  toBoolean,
+  toNumber,
+  toRecord,
+  tryCatch,
+  envNumber,
+  envBoolean,
+  envJson,
+} from '../src';
 
 describe('node', () => {
   test('env', () => {
@@ -13,12 +25,24 @@ describe('node', () => {
     expect(env('envString')).toEqual('titi');
     expect(envNumber('envNumber')).toEqual(5);
     expect(envBoolean('envBoolean')).toEqual(true);
-    expect(envJson('envJson')).toEqual({ a:1 });
+    expect(envJson('envJson')).toEqual({ a: 1 });
 
-    try { env('envNotString'); expect(1).toEqual(0); } catch(e) {}
-    try { envNumber('envNotNumber'); expect(1).toEqual(0); } catch(e) {}
-    try { envBoolean('envNotBoolean'); expect(1).toEqual(0); } catch(e) {}
-    try { envJson('envNotJson'); expect(1).toEqual(0); } catch(e) {}
+    try {
+      env('envNotString');
+      expect(1).toEqual(0);
+    } catch (e) {}
+    try {
+      envNumber('envNotNumber');
+      expect(1).toEqual(0);
+    } catch (e) {}
+    try {
+      envBoolean('envNotBoolean');
+      expect(1).toEqual(0);
+    } catch (e) {}
+    try {
+      envJson('envNotJson');
+      expect(1).toEqual(0);
+    } catch (e) {}
   });
 
   test(`cmd`, async () => {

@@ -1,4 +1,4 @@
-import { firstUpper, firstLower, clean, words, pascal, camel } from '../src';
+import { firstUpper, firstLower, clean, words, pascal, camel, replace, setTemplate } from '../src';
 
 describe('string', () => {
   test(`firstUpper`, () => {
@@ -63,5 +63,18 @@ describe('string', () => {
     expect(camel('abc1')).toEqual('abc1');
     expect(camel('abc2 def3')).toEqual('abc2Def3');
     expect(camel(' abc4 def5 ')).toEqual('abc4Def5');
+  });
+
+  test(`replace`, () => {
+    expect(replace('abcabc', { bc: 'd' })).toEqual('adad');
+    expect(replace('a&$ab&$', { '&$': 'd' })).toEqual('adabd');
+    expect(replace('a.*+?^=!:${}()|\\/b', { '.*+?^=!:${}()|\\/': '' })).toEqual('ab');
+    expect(replace('a.ab.', { '.': '$' })).toEqual('a$ab$');
+    expect(replace('a[.]ab[.]', { '[.]': '$' })).toEqual('a$ab$');
+    expect(replace('toto tututoto b!', { toto: 5, b: 'ok' })).toEqual('5 tutu5 ok!');
+  });
+
+  test(`setTemplate`, () => {
+    expect(setTemplate('{a}{bc}de{a}f{bc}', { a: 5, bc: 'ok' })).toEqual('5okde5fok');
   });
 });

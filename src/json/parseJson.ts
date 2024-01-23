@@ -7,4 +7,4 @@ interface ParseJson {
 }
 
 export const parseJson = (<T, U>(v: any, def?: U): T | U | undefined =>
-  tryCatch(() => isNotNull(v) ? JSON.parse(v) as T : def, def)) as ParseJson;
+  tryCatch(() => (isNotNull(v) ? (JSON.parse(v) as T) : def), def)) as ParseJson;

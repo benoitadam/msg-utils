@@ -1,6 +1,6 @@
 import { getModule } from '../module';
 
-export const uuid = () => {
+export const uuid = (): string => {
   const { randomUUID, getRandomValues } = getModule('crypto') || {};
   if (randomUUID) return randomUUID();
   if (getRandomValues) {

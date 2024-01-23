@@ -1,4 +1,4 @@
-import { isRecord, parseJson } from '..';
+import { parseJson } from '..';
 import { toFormData } from '../cast/toFormData';
 import { isFunction } from '../check/isFunction';
 import { isString } from '../check/isString';

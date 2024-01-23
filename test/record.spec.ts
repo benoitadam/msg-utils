@@ -119,10 +119,12 @@ describe('record', () => {
   });
 
   test(`getChanges`, () => {
-    expect(getChanges({ a:1 }, { a:1, b:2 })).toEqual({ b:2 });
+    expect(getChanges({ a: 1 }, { a: 1, b: 2 })).toEqual({ b: 2 });
+    expect(getChanges({ a: 1 }, { a: 2, b: 2 })).toEqual({ a: 2, b: 2 });
   });
 
   test(`merge`, () => {
-    expect(merge({ a:1 }, { b:2 })).toEqual({ a:1, b:2 });
+    expect(merge({ a: 1 }, { b: 2 })).toEqual({ a: 1, b: 2 });
+    expect(merge({ a: 1 }, { a: 2 })).toEqual({ a: 2 });
   });
 });

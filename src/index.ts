@@ -105,5 +105,7 @@ export * from './string/clean';
 export * from './string/firstLower';
 export * from './string/firstUpper';
 export * from './string/pascal';
+export * from './string/replace';
+export * from './string/setTemplate';
 export * from './string/uuid';
 export * from './string/words';

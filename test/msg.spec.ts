@@ -1,7 +1,7 @@
 import { Msg, sleep } from '../src';
 
-describe('Msg', () => {
-  test(`Msg set and on off`, () => {
+describe('msg', () => {
+  test(`msg.set and on off`, () => {
     const o1 = new Msg(0);
     expect(o1.get()).toEqual(0);
 
@@ -29,14 +29,14 @@ describe('Msg', () => {
     expect(b).toEqual(2);
   });
 
-  test(`Msg next callback`, () => {
+  test(`msg.next callback`, () => {
     const o1 = new Msg(0);
     expect(o1.val).toEqual(0);
     o1.next((v) => v + 1);
     expect(o1.val).toEqual(1);
   });
 
-  test(`Msg toPromise`, async () => {
+  test(`msg.toPromise`, async () => {
     const o1 = new Msg(0);
 
     let a = 1;
@@ -53,7 +53,7 @@ describe('Msg', () => {
     expect(b).toEqual(3);
   });
 
-  test(`Msg map`, async () => {
+  test(`msg.map`, async () => {
     const o1 = new Msg(0);
     const map = o1.map((v) => v + 1);
     let v = map.get();
@@ -68,7 +68,7 @@ describe('Msg', () => {
     expect(v).toEqual(51);
   });
 
-  test(`Msg getter setter`, () => {
+  test(`msg getter setter`, () => {
     const o1 = new Msg(0);
     const getVal = o1.get.bind(o1);
     const setVal = o1.set.bind(o1);
@@ -80,13 +80,13 @@ describe('Msg', () => {
     expect(getVal.call(this)).toEqual(2);
   });
 
-  test('Msg.get', () => {
+  test('msg.get', () => {
     expect(Msg.get('a', 1)).toEqual(Msg.get('a', 2));
     expect(Msg.get('a', 1)).toEqual(Msg.get('a', 3));
     expect(Msg.get('b', 1)).not.toEqual(Msg.get('a', 2));
   });
 
-  test(`debounce`, async () => {
+  test(`msg.debounce`, async () => {
     const m0 = new Msg(0);
     const m1 = m0.debounce(5);
 
@@ -117,9 +117,9 @@ describe('Msg', () => {
     expect(count).toEqual(2);
   });
 
-  test(`throttle`, async () => {
+  test(`msg.throttle`, async () => {
     const m0 = new Msg(0);
-    const m1 = m0.throttle(5);
+    const m1 = m0.throttle(50);
 
     let last = -1;
     let lastEqual = false;
@@ -136,7 +136,7 @@ describe('Msg', () => {
     m0.set(2);
     expect(m1.get()).toEqual(1);
 
-    await sleep(50);
+    await sleep(100);
     expect(m1.get()).toEqual(2);
 
     m0.set(3);
@@ -144,7 +144,7 @@ describe('Msg', () => {
     m0.set(5);
     expect(m1.get()).toEqual(3);
 
-    await sleep(50);
+    await sleep(100);
     expect(m1.get()).toEqual(5);
 
     expect(lastEqual).toEqual(false);

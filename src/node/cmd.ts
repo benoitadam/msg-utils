@@ -2,6 +2,8 @@ import type { SpawnOptions, ChildProcess, spawn } from 'child_process';
 import type { Readable } from 'stream';
 import { Msg } from '../msg/Msg';
 import { getModule } from '../module';
+import { setTemplate } from '../string/setTemplate';
+import { IMsgHandler } from '../msg';
 
 export type CmdValues = Record<string, any>;
 
@@ -9,8 +11,18 @@ export interface CmdOptions extends SpawnOptions {
   encoding?: BufferEncoding;
   timeout?: number;
   noListen?: boolean;
+  logs?: boolean;
+  onOut?: IMsgHandler<any>;
+  onErr?: IMsgHandler<any>;
 }
 
+/**
+ * Lit toutes les données d'un flux jusqu'à la fin et les renvoie sous forme de Buffer.
+ *
+ * @param {Readable} stream - Le flux à lire. Il doit être un objet conforme à l'interface Readable de Node.js.
+ * @returns {Promise<Buffer>} Une promesse qui résout en un Buffer contenant toutes les données lues du flux.
+ *                             Si le flux n'est pas fourni ou est invalide, la fonction renvoie `undefined`.
+ */
 export async function readToEnd(stream: Readable) {
   const chunks: Buffer[] = [];
   if (!stream) return;
@@ -19,8 +31,24 @@ export async function readToEnd(stream: Readable) {
   return data;
 }
 
+/**
+ * Convertit un tableau de morceaux de données en un seul buffer.
+ * Si le tableau ne contient qu'un seul élément, cet élément est renvoyé directement.
+ * Si le tableau contient plusieurs éléments, ils sont concaténés en un seul buffer.
+ *
+ * @param {any[]} chunks - Un tableau de morceaux de données (buffers, strings, etc.).
+ * @returns {Buffer} Le buffer résultant de la concaténation des morceaux de données.
+ */
 export const chunksToBuffer = (chunks: any[]) =>
   chunks.length === 1 ? chunks[0] : Buffer.concat(chunks);
+
+/**
+ * Concatène un tableau de fragments en une seule chaîne de caractères.
+ *
+ * @param {any[]} chunks - Un tableau contenant des éléments à concaténer.
+ *                         Ces éléments doivent être convertissables en chaîne de caractères.
+ * @returns {string} Une chaîne de caractères résultant de la concaténation de tous les éléments du tableau.
+ */
 export const chunksToString = (chunks: any[]) => chunks.join('');
 
 export class CmdReader {
@@ -33,13 +61,15 @@ export class CmdReader {
   }
 
   listen() {
-    if (this.data$) return this.data$;
-    const data$ = new Msg(undefined);
-    this.data$ = data$;
-    this.stream.on('data', (data) => {
-      data$.set(data, true);
-      this.chunks.push(data);
-    });
+    if (!this.data$) {
+      const data$ = new Msg(undefined);
+      this.data$ = data$;
+      this.stream.on('data', (data) => {
+        data$.set(data, true);
+        this.chunks.push(data);
+      });
+    }
+    return this.data$;
   }
 
   async read() {
@@ -79,15 +109,21 @@ export class Cmd {
   code?: number | null;
   error?: Error;
 
+  /**
+   *
+   * @param command The command to execute "cd {name}"
+   * @param inputs The values to replace. For { name: "test" }, "cd ../{name}" => "cd ../test"
+   * @param options
+   */
   constructor(
     public command: string,
     public inputs?: CmdValues | null,
     public options: CmdOptions = {},
   ) {
     console.debug('Cmd', command, inputs, options);
-    const { encoding, env, timeout, ...spawnOptions } = options || {};
+    const { encoding, env, timeout, logs, onOut, onErr, ...spawnOptions } = options || {};
     let args = String(command).split(' ');
-    if (inputs) args = args.map((a) => a.replace(/\{(\w+)\}/g, (s, k) => String(inputs[k]) || s));
+    if (inputs) args = args.map((a) => setTemplate(a, inputs));
     const nodeSpawn: typeof spawn = getModule('child_process').spawn;
     const { stdout, stderr } = (this.cp = nodeSpawn(args.shift() || '', args, {
       //stdio: 'inherit',
@@ -97,8 +133,16 @@ export class Cmd {
       shell: true,
       ...spawnOptions,
     }));
-    if (stdout) this.out = new CmdReader(stdout, encoding);
-    if (stderr) this.err = new CmdReader(stderr, encoding);
+    if (stdout) {
+      this.out = new CmdReader(stdout, encoding);
+      if (logs) this.out.listen()?.on((msg) => console.log('cmd out', String(msg)));
+      if (onOut) this.out.listen()?.on(onOut);
+    }
+    if (stderr) {
+      this.err = new CmdReader(stderr, encoding);
+      if (logs) this.err.listen()?.on((msg) => console.log('cmd err', String(msg)));
+      if (onErr) this.err.listen()?.on(onErr);
+    }
   }
 
   wait(): Promise<Cmd> {
@@ -136,6 +180,13 @@ export class Cmd {
   }
 }
 
+/**
+ *
+ * @param command The command to execute "cd {name}"
+ * @param values The values to replace. For { name: "test" }, "cd ../{name}" => "cd ../test"
+ * @param options
+ * @returns
+ */
 export const cmd = (
   command: string,
   values?: CmdValues,
