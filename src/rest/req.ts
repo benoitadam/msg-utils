@@ -26,7 +26,7 @@ export const reqXHR = async <T = any>(ctx: RestContext<T>): Promise<void> => {
   try {
     const o = ctx.options;
     const _XMLHttpRequest = getModule('XMLHttpRequest');
-    const xhr: XMLHttpRequest = o.xhr || (o.xhr = new _XMLHttpRequest());
+    const xhr: XMLHttpRequest = ctx.xhr || (ctx.xhr = new _XMLHttpRequest());
 
     xhr.timeout = ctx.timeout || 20000;
     const responseType = (xhr.responseType = ctx.responseType || 'json');
@@ -42,10 +42,15 @@ export const reqXHR = async <T = any>(ctx: RestContext<T>): Promise<void> => {
       xhr.setRequestHeader(key, val);
     }
 
-    xhr.addEventListener('progress', (event) => {
-      ctx.event = event;
-      if (o.onProgress) o.onProgress(event.loaded / event.total, ctx);
-    });
+    const onProgress = o.onProgress;
+    if (onProgress) {
+      const _onProgress = (event: ProgressEvent<XMLHttpRequestEventTarget>) => {
+        ctx.event = event;
+        onProgress(event.loaded / event.total, ctx);
+      };
+      xhr.addEventListener('progress', _onProgress);
+      xhr.upload?.addEventListener('progress', _onProgress);
+    }
 
     if (o.before) await o.before(ctx);
     await new Promise<void>((resolve) => {

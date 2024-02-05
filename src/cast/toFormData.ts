@@ -1,3 +1,4 @@
+import { isNode } from '../check/isNode';
 import { getJson } from '../json/getJson';
 
 interface ToFormData {
@@ -20,7 +21,13 @@ export const toFormData = ((record?: Record<string, any> | FormData | null) => {
   const formData = new FormData();
   for (const key in record) {
     let value = record[key];
-    if (typeof value !== 'string') value = getJson(value);
+    if (
+      typeof value !== 'string' &&
+      !(typeof File === 'function' && value instanceof File) &&
+      !(typeof Blob === 'function' && value instanceof Blob)
+    ) {
+      value = getJson(value);
+    }
     formData.append(key, value);
   }
   return formData;

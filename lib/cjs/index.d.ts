@@ -35,6 +35,7 @@ export * from './check/isEmptyRecord';
 export * from './check/isEqual';
 export * from './check/isFunction';
 export * from './check/isNil';
+export * from './check/isNode';
 export * from './check/isNotNull';
 export * from './check/isNumber';
 export * from './check/isObject';

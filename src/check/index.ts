@@ -9,6 +9,7 @@ export * from './isEmptyRecord';
 export * from './isEqual';
 export * from './isFunction';
 export * from './isNil';
+export * from './isNode';
 export * from './isNotNull';
 export * from './isNumber';
 export * from './isObject';
