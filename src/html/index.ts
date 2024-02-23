@@ -1,7 +1,10 @@
 ///// GENERATED FILE /////
 
+export * from './VDialog';
+export * from './VField';
 export * from './addCssFile';
 export * from './addDrag';
+export * from './addEl';
 export * from './addJsFile';
 export * from './addListener';
 export * from './getAttrs';

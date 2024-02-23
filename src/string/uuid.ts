@@ -1,11 +1,11 @@
 import { getModule } from '../module';
 
 export const uuid = (): string => {
-  const { randomUUID, getRandomValues } = getModule('crypto') || {};
-  if (randomUUID) return randomUUID();
-  if (getRandomValues) {
+  const crypto = getModule('crypto') || {};
+  if (crypto.randomUUID) return crypto.randomUUID();
+  if (crypto.getRandomValues) {
     var buff = new Uint16Array(8);
-    getRandomValues(buff);
+    crypto.getRandomValues(buff);
     const S = (i: number) => buff[i].toString(16).padStart(4, '0');
     return S(0) + S(1) + '-' + S(2) + '-' + S(3) + '-' + S(4) + '-' + S(5) + S(6) + S(7);
   }
