@@ -18,6 +18,7 @@
   ],
   "main": "./lib/cjs/index.js",
   "module": "./lib/index.js",
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/benoitadam/msg-utils.git"
