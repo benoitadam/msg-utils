@@ -2,16 +2,16 @@ import { IMsg, IMsgFilter, IMsgHandler, IMsgReadonly, IMsgSet, IMsgSubscription 
 export declare class Msg<T = any> implements IMsg<T> {
     static byKey: Record<string, Msg>;
     static get<T>(key: string, initValue: T, isStored?: boolean): Msg<T>;
-    private k?;
+    k?: string;
     /** Value */
-    private v;
+    v: T;
     /** Handlers */
     private h;
     /** map and debounce */
     private s?;
     private sO?;
     private sH?;
-    constructor(initValue: T, key?: string);
+    constructor(initValue: T, key?: string, sourceOff?: () => void);
     get val(): T;
     get value(): T;
     get key(): string | undefined;
