@@ -13,7 +13,8 @@ export interface IMsgSet<T> {
     set(value: T): IMsg<T>;
 }
 export interface IMsgReadonly<T> extends IMsgGet<T>, IMsgSubscribe<T> {
-    get key(): string | undefined;
+    readonly key?: string;
+    readonly v: T;
     get val(): T;
     get value(): T;
     on(h: IMsgHandler<T>): () => void;

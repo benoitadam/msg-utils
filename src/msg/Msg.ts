@@ -9,6 +9,13 @@ import { IMsg, IMsgFilter, IMsgHandler, IMsgReadonly, IMsgSet, IMsgSubscription 
 export class Msg<T = any> implements IMsg<T> {
   static byKey: Record<string, Msg> = {};
 
+  static from<T>(sourceOn: Msg['sOn'], initValue: T, sourceHandler?: (target: IMsg<T>) => IMsgHandler<any>) {
+    const target = new Msg<T>(initValue);
+    target.sOn = sourceOn;
+    target.sHandler = (sourceHandler && sourceHandler(target)) || ((value: any) => target.set(value));
+    return target;
+  }
+
   static get<T>(key: string, initValue: T, isStored?: boolean): Msg<T> {
     let msg = this.byKey[key];
     if (msg) return msg;
@@ -21,7 +28,7 @@ export class Msg<T = any> implements IMsg<T> {
     return msg;
   }
 
-  public k?: string;
+  public key?: string;
 
   /** Value */
   public v: T;
@@ -30,26 +37,21 @@ export class Msg<T = any> implements IMsg<T> {
   private h: IMsgHandler<T>[] = [];
 
   /** map and debounce */
-  private s?: Msg; // source
-  private sO?: () => void; // sourceOff
-  private sH?: IMsgHandler<any>; // sourceHandler
+  private sOn?: (handler: IMsgHandler<any>) => () => void;
+  private sOff?: () => void;
+  private sHandler?: IMsgHandler<any>;
 
-  constructor(initValue: T, key?: string, sourceOff?: () => void) {
+  constructor(initValue: T, key?: string) {
     this.v = initValue;
-    this.k = key;
-    this.sO = sourceOff;
+    this.key = key;
   }
-
+  
   get val(): T {
     return this.get();
   }
 
   get value(): T {
     return this.get();
-  }
-
-  get key(): string | undefined {
-    return this.k;
   }
 
   get(): T {
@@ -80,17 +82,16 @@ export class Msg<T = any> implements IMsg<T> {
 
   on(handler: IMsgHandler<T>) {
     this.h.push(handler);
-    if (!this.sO && this.s && this.sH) {
-      this.sO = this.s.on(this.sH);
-    }
+    if (!this.sOff && this.sOn && this.sHandler)
+      this.sOff = this.sOn(this.sHandler);
     return () => this.off(handler);
   }
 
   off(handler: IMsgHandler<T>) {
     removeItem(this.h, handler);
-    if (this.sO && this.h.length === 0) {
-      this.sO();
-      delete this.sO;
+    if (this.sOff && this.h.length === 0) {
+      this.sOff();
+      if (this.sOn && this.sHandler) delete this.sOff;
     }
   }
 
@@ -104,10 +105,11 @@ export class Msg<T = any> implements IMsg<T> {
     sourceHandler?: (target: IMsg<U>) => IMsgHandler<any>,
   ): IMsgReadonly<U> {
     const source = this;
-    const target = new Msg<U>(cb(source.v));
-    target.s = source;
-    target.sH = sourceHandler ? sourceHandler(target) : () => target.set(cb(source.v));
-    return target;
+    return Msg.from(
+      h => source.on(h),
+      cb(source.v),
+      target => sourceHandler ? sourceHandler(target) : (value) => target.set(cb(value))
+    );
   }
 
   debounce(ms: number): IMsgReadonly<T> {

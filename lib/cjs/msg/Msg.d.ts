@@ -1,20 +1,20 @@
 import { IMsg, IMsgFilter, IMsgHandler, IMsgReadonly, IMsgSet, IMsgSubscription } from './types';
 export declare class Msg<T = any> implements IMsg<T> {
     static byKey: Record<string, Msg>;
+    static from<T>(sourceOn: Msg['sOn'], initValue: T, sourceHandler?: (target: IMsg<T>) => IMsgHandler<any>): Msg<T>;
     static get<T>(key: string, initValue: T, isStored?: boolean): Msg<T>;
-    k?: string;
+    key?: string;
     /** Value */
     v: T;
     /** Handlers */
     private h;
     /** map and debounce */
-    private s?;
-    private sO?;
-    private sH?;
-    constructor(initValue: T, key?: string, sourceOff?: () => void);
+    private sOn?;
+    private sOff?;
+    private sHandler?;
+    constructor(initValue: T, key?: string);
     get val(): T;
     get value(): T;
-    get key(): string | undefined;
     get(): T;
     set(value: T, ignoreEqual?: boolean): this;
     next(value: T | ((value: T) => T), ignoreEqual?: boolean): this;
