@@ -21,22 +21,23 @@ export class Msg<T = any> implements IMsg<T> {
     return msg;
   }
 
-  private k?: string;
+  public k?: string;
 
   /** Value */
-  private v: T;
+  public v: T;
 
   /** Handlers */
   private h: IMsgHandler<T>[] = [];
 
   /** map and debounce */
-  private s?: Msg;
-  private sO?: () => void;
-  private sH?: IMsgHandler<any>;
+  private s?: Msg; // source
+  private sO?: () => void; // sourceOff
+  private sH?: IMsgHandler<any>; // sourceHandler
 
-  constructor(initValue: T, key?: string) {
+  constructor(initValue: T, key?: string, sourceOff?: () => void) {
     this.v = initValue;
-    if (key) this.k = key;
+    this.k = key;
+    this.sO = sourceOff;
   }
 
   get val(): T {
