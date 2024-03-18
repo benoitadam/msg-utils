@@ -9,8 +9,9 @@ import { IMsg, IMsgFilter, IMsgHandler, IMsgReadonly, IMsgSet, IMsgSubscription 
 export class Msg<T = any> implements IMsg<T> {
   static byKey: Record<string, Msg> = {};
 
-  static from<T>(sourceOn: Msg['sOn'], initValue: T, sourceHandler?: (target: IMsg<T>) => IMsgHandler<any>) {
-    const target = new Msg<T>(initValue);
+  static from<T>(sourceOn: (handler: IMsgHandler<any>) => () => void, initValue: T, sourceHandler?: (target: IMsg<T>) => IMsgHandler<any>): Msg<T>;
+  static from<T>(sourceOn: (handler: IMsgHandler<any>) => () => void, initValue?: T, sourceHandler?: (target: IMsg<T|undefined>) => IMsgHandler<any>): Msg<T|undefined> {
+    const target = new Msg<T|undefined>(initValue);
     target.sOn = sourceOn;
     target.sHandler = (sourceHandler && sourceHandler(target)) || ((value: any) => target.set(value));
     return target;

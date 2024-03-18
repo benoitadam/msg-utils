@@ -1,7 +1,7 @@
 import { IMsg, IMsgFilter, IMsgHandler, IMsgReadonly, IMsgSet, IMsgSubscription } from './types';
 export declare class Msg<T = any> implements IMsg<T> {
     static byKey: Record<string, Msg>;
-    static from<T>(sourceOn: Msg['sOn'], initValue: T, sourceHandler?: (target: IMsg<T>) => IMsgHandler<any>): Msg<T>;
+    static from<T>(sourceOn: (handler: IMsgHandler<any>) => () => void, initValue: T, sourceHandler?: (target: IMsg<T>) => IMsgHandler<any>): Msg<T>;
     static get<T>(key: string, initValue: T, isStored?: boolean): Msg<T>;
     key?: string;
     /** Value */
