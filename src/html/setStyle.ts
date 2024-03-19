@@ -1,4 +1,4 @@
-import { setAttrs } from '..';
+import { setAttrs } from './setAttrs';
 import { Style } from './interfaces';
 
 export const setStyle = (el: HTMLElement, style: Style | string, update?: boolean) => {

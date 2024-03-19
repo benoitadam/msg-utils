@@ -1,4 +1,4 @@
-import { isNotNull } from '..';
+import { isNotNull } from '../check/isNotNull';
 import { tryCatch } from '../cast/tryCatch';
 
 interface ParseJson {

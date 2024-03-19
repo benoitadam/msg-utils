@@ -1,4 +1,4 @@
-import { parseJson } from '..';
+import { parseJson } from '../json/parseJson';
 import { toFormData } from '../cast/toFormData';
 import { isFunction } from '../check/isFunction';
 import { isString } from '../check/isString';
