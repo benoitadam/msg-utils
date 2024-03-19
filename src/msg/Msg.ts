@@ -1,3 +1,4 @@
+import { toVoid } from '../cast/toVoid';
 import { removeItem } from '../array/removeItem';
 import { isFunction } from '../check/isFunction';
 import { isNotNull } from '../check/isNotNull';
@@ -9,11 +10,12 @@ import { IMsg, IMsgFilter, IMsgHandler, IMsgReadonly, IMsgSet, IMsgSubscription 
 export class Msg<T = any> implements IMsg<T> {
   static byKey: Record<string, Msg> = {};
 
-  static from<T>(sourceOn: (handler: IMsgHandler<any>) => () => void, initValue: T, sourceHandler?: (target: IMsg<T>) => IMsgHandler<any>): Msg<T>;
-  static from<T>(sourceOn: (handler: IMsgHandler<any>) => () => void, initValue?: T, sourceHandler?: (target: IMsg<T|undefined>) => IMsgHandler<any>): Msg<T|undefined> {
+  static from<T>(sourceOn: (target: IMsg<T>) => () => void, initValue: T): Msg<T>;
+  static from<T>(sourceOn: (target: IMsg<T|undefined>) => () => void): Msg<T|undefined>;
+  static from<T>(sourceOn: (target: IMsg<T|undefined>) => () => void, initValue?: T|undefined): Msg<T|undefined> {
     const target = new Msg<T|undefined>(initValue);
-    target.sOn = sourceOn;
-    target.sHandler = (sourceHandler && sourceHandler(target)) || ((value: any) => target.set(value));
+    target.sOn = () => sourceOn(target);
+    target.sHandler = toVoid;
     return target;
   }
 
@@ -106,11 +108,10 @@ export class Msg<T = any> implements IMsg<T> {
     sourceHandler?: (target: IMsg<U>) => IMsgHandler<any>,
   ): IMsgReadonly<U> {
     const source = this;
-    return Msg.from(
-      h => source.on(h),
-      cb(source.v),
-      target => sourceHandler ? sourceHandler(target) : (value) => target.set(cb(value))
-    );
+    const target = new Msg<U>(cb(source.v));
+    target.sOn = h => source.on(h);
+    target.sHandler = (sourceHandler && sourceHandler(target)) || ((value: any) => target.set(value));
+    return target;
   }
 
   debounce(ms: number): IMsgReadonly<T> {
