@@ -1,20 +1,20 @@
-import { toVoid } from "../cast/toVoid";
-import { isString } from "../check/isString";
-import { setTemplate } from "../string/setTemplate";
-import { addEl } from "./addEl";
-import { ElOptions } from "./interfaces";
-import { setCss } from "./setCss";
-import { setEl } from "./setEl";
+import { toVoid } from '../cast/toVoid';
+import { isString } from '../check/isString';
+import { setTemplate } from '../string/setTemplate';
+import { addEl } from './addEl';
+import { ElOptions } from './interfaces';
+import { setCss } from './setCss';
+import { setEl } from './setEl';
 
 export type VFieldType = 'email' | 'text' | 'number';
 
 export interface VFieldOptions {
-    readonly cls?: string,
-    readonly type?: VFieldType,
-    readonly name?: string,
-    readonly label?: ElOptions | string,
-    readonly input?: ElOptions,
-    readonly onChange?: (field: VField, ev: Event) => void,
+  readonly cls?: string;
+  readonly type?: VFieldType;
+  readonly name?: string;
+  readonly label?: ElOptions | string;
+  readonly input?: ElOptions;
+  readonly onChange?: (field: VField, ev: Event) => void;
 }
 
 const css = `
@@ -23,55 +23,70 @@ const css = `
 .{c}_input { border: 1px solid gray; border-radius: 5px; padding: 5px 10px; margin: 5px 0; }`;
 
 export class VField {
-    static count = 0;
+  static count = 0;
 
-    options: VFieldOptions;
-    
-    el: HTMLElement;
-    labelEl: HTMLLabelElement;
-    inputEl: HTMLInputElement;
-    onChange: (field: VField, ev: Event) => void;
+  options: VFieldOptions;
 
-    constructor(options: VFieldOptions) {
-        this.options = options;
-        const { cls, type, name, label, input, onChange } = options;
+  el: HTMLElement;
+  labelEl: HTMLLabelElement;
+  inputEl: HTMLInputElement;
+  onChange: (field: VField, ev: Event) => void;
 
-        this.onChange = onChange || toVoid;
+  constructor(options: VFieldOptions) {
+    this.options = options;
+    const { cls, type, name, label, input, onChange } = options;
 
-        const c = cls || 'vFld';
-        setCss(c, setTemplate(css, { c }));
+    this.onChange = onChange || toVoid;
 
-        VField.count++;
-        const id = name || c + VField.count;
+    const c = cls || 'vFld';
+    setCss(c, setTemplate(css, { c }));
 
-        const el = this.el = setEl('div', { cls: c });
-        (el as any)._vField = this;
+    VField.count++;
+    const id = name || c + VField.count;
 
-        const labelEl = setEl('label', { cls: c + '_label', for: id, ...(isString(label) ? { innerHTML: label } : label) } as any) as HTMLLabelElement;
-        const inputEl = setEl('input', { cls: c + '_input', id, name: id, type, ...input } as any) as HTMLInputElement;
-        
-        this.labelEl = labelEl;
-        this.inputEl = inputEl;
+    const el = (this.el = setEl('div', { cls: c }));
+    (el as any)._vField = this;
 
-        inputEl.onchange = this._onChange.bind(this);
+    const labelEl = setEl('label', {
+      cls: c + '_label',
+      for: id,
+      ...(isString(label) ? { innerHTML: label } : label),
+    } as any) as HTMLLabelElement;
+    const inputEl = setEl('input', {
+      cls: c + '_input',
+      id,
+      name: id,
+      type,
+      ...input,
+    } as any) as HTMLInputElement;
 
-        addEl(el, labelEl, inputEl); 
-    }
+    this.labelEl = labelEl;
+    this.inputEl = inputEl;
 
-    _onChange(ev: Event) {
-        this.onChange(this, ev);
-    }
+    inputEl.onchange = this._onChange.bind(this);
 
-    getValue() {
-        return this.inputEl.value;
-    }
+    addEl(el, labelEl, inputEl);
+  }
 
-    setValue(value: string) {
-        this.inputEl.value = value;
-    }
+  _onChange(ev: Event) {
+    this.onChange(this, ev);
+  }
+
+  getValue() {
+    return this.inputEl.value;
+  }
+
+  setValue(value: string) {
+    this.inputEl.value = value;
+  }
 }
 
-export const vFieldFrom = (o: VFieldOptions|HTMLElement|VField) =>
-    (o instanceof VField) ? o : (o instanceof HTMLElement) ? (o as any)._vField as VField : new VField(o);
+export const vFieldFrom = (o: VFieldOptions | HTMLElement | VField) =>
+  o instanceof VField
+    ? o
+    : o instanceof HTMLElement
+    ? ((o as any)._vField as VField)
+    : new VField(o);
 
-export const vFieldEl = (o: VFieldOptions|HTMLElement|VField) => (o instanceof HTMLElement) ? o : vFieldFrom(o).el;
+export const vFieldEl = (o: VFieldOptions | HTMLElement | VField) =>
+  o instanceof HTMLElement ? o : vFieldFrom(o).el;

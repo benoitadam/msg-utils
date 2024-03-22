@@ -11,9 +11,12 @@ export class Msg<T = any> implements IMsg<T> {
   static byKey: Record<string, Msg> = {};
 
   static from<T>(sourceOn: (target: IMsg<T>) => () => void, initValue: T): Msg<T>;
-  static from<T>(sourceOn: (target: IMsg<T|undefined>) => () => void): Msg<T|undefined>;
-  static from<T>(sourceOn: (target: IMsg<T|undefined>) => () => void, initValue?: T|undefined): Msg<T|undefined> {
-    const target = new Msg<T|undefined>(initValue);
+  static from<T>(sourceOn: (target: IMsg<T | undefined>) => () => void): Msg<T | undefined>;
+  static from<T>(
+    sourceOn: (target: IMsg<T | undefined>) => () => void,
+    initValue?: T | undefined,
+  ): Msg<T | undefined> {
+    const target = new Msg<T | undefined>(initValue);
     target.sOn = () => sourceOn(target);
     target.sHandler = toVoid;
     return target;
@@ -48,7 +51,7 @@ export class Msg<T = any> implements IMsg<T> {
     this.v = initValue;
     this.key = key;
   }
-  
+
   get val(): T {
     return this.get();
   }
@@ -85,8 +88,7 @@ export class Msg<T = any> implements IMsg<T> {
 
   on(handler: IMsgHandler<T>) {
     this.h.push(handler);
-    if (!this.sOff && this.sOn && this.sHandler)
-      this.sOff = this.sOn(this.sHandler);
+    if (!this.sOff && this.sOn && this.sHandler) this.sOff = this.sOn(this.sHandler);
     return () => this.off(handler);
   }
 
@@ -109,8 +111,9 @@ export class Msg<T = any> implements IMsg<T> {
   ): IMsgReadonly<U> {
     const source = this;
     const target = new Msg<U>(cb(source.v));
-    target.sOn = h => source.on(h);
-    target.sHandler = (sourceHandler && sourceHandler(target)) || ((value: any) => target.set(value));
+    target.sOn = (h) => source.on(h);
+    target.sHandler =
+      (sourceHandler && sourceHandler(target)) || ((value: any) => target.set(value));
     return target;
   }
 

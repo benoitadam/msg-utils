@@ -1,0 +1,1 @@
+cp -r ./ /home/ubuntu/m4k/editor/node_modules/vegi

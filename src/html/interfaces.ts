@@ -2,7 +2,11 @@ export type Cls = Record<string, boolean | number | undefined | null>;
 
 export type Style = Partial<CSSStyleDeclaration>;
 
-export type HTMLAllElement = HTMLDivElement & HTMLInputElement & HTMLVideoElement & HTMLImageElement & HTMLHeadingElement;
+export type HTMLAllElement = HTMLDivElement &
+  HTMLInputElement &
+  HTMLVideoElement &
+  HTMLImageElement &
+  HTMLHeadingElement;
 
 export type ElOptions = Omit<Omit<Partial<HTMLAllElement>, 'children'>, 'style'> & {
   readonly reset?: boolean;

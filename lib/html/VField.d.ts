@@ -1,4 +1,4 @@
-import { ElOptions } from "./interfaces";
+import { ElOptions } from './interfaces';
 export type VFieldType = 'email' | 'text' | 'number';
 export interface VFieldOptions {
     readonly cls?: string;

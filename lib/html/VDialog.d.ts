@@ -1,5 +1,5 @@
-import { VField, VFieldOptions, VFieldType } from "./VField";
-import { ElOptions } from "./interfaces";
+import { VField, VFieldOptions, VFieldType } from './VField';
+import { ElOptions } from './interfaces';
 export interface VDialogButtonOptions {
     title: string;
     cls: string;

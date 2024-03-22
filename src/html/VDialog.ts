@@ -1,34 +1,34 @@
-import { isString } from "../check/isString";
-import { setTemplate } from "../string/setTemplate";
-import { VField, VFieldOptions, VFieldType } from "./VField";
-import { addEl } from "./addEl";
-import { ElOptions } from "./interfaces";
-import { setCls } from "./setCls";
-import { setCss } from "./setCss";
-import { setEl } from "./setEl";
+import { isString } from '../check/isString';
+import { setTemplate } from '../string/setTemplate';
+import { VField, VFieldOptions, VFieldType } from './VField';
+import { addEl } from './addEl';
+import { ElOptions } from './interfaces';
+import { setCls } from './setCls';
+import { setCss } from './setCss';
+import { setEl } from './setEl';
 
 export interface VDialogButtonOptions {
-    title: string,
-    cls: string,
+  title: string;
+  cls: string;
 }
 
 export interface VDialogFieldOptions {
-    name: string,
-    label: string,
-    type: string,
-    required: boolean,
+  name: string;
+  label: string;
+  type: string;
+  required: boolean;
 }
 
 export interface VDialogOptions {
-    cls?: string;
-    title?: ElOptions | string,
-    message?: ElOptions | string,
-    field?: VFieldOptions|HTMLElement|VFieldType,
-    cancel?: ElOptions | string,
-    submit?: ElOptions | string,
-    onClose?: (dialog: VDialog, e: Event) => void,
-    onSubmit?: (dialog: VDialog, e: Event) => void,
-    onChange?: (dialog: VDialog, e: Event) => void,
+  cls?: string;
+  title?: ElOptions | string;
+  message?: ElOptions | string;
+  field?: VFieldOptions | HTMLElement | VFieldType;
+  cancel?: ElOptions | string;
+  submit?: ElOptions | string;
+  onClose?: (dialog: VDialog, e: Event) => void;
+  onSubmit?: (dialog: VDialog, e: Event) => void;
+  onChange?: (dialog: VDialog, e: Event) => void;
 }
 
 const css = `
@@ -65,9 +65,9 @@ const css = `
 /**
  * Represents a dialog component with customizable options for title, message, fields, and actions.
  * This class provides methods to create and manipulate a dialog interface, including form submission and value handling.
- * 
+ *
  * @class VDialog
- * 
+ *
  * @property {VDialogOptions} options - Configuration options for the dialog.
  * @property {HTMLDivElement} el - The main container element of the dialog.
  * @property {string} c - The base CSS class name for styling the dialog.
@@ -83,153 +83,156 @@ const css = `
  * @property {(dialog: VDialog, e: Event) => void} [onClose] - Callback function to execute when the dialog is closed.
  * @property {(dialog: VDialog, e: Event) => void} [onSubmit] - Callback function to execute on form submission.
  * @property {(dialog: VDialog, e: Event) => void} [onChange] - Callback function to execute when the dialog's content changes, optional.
- * 
+ *
  * @constructor
  * Creates an instance of `VDialog` with specified options. It constructs the dialog's HTML structure and initializes event listeners.
- * 
+ *
  * @param {VDialogOptions} options - Configuration options for the dialog.
  */
 export class VDialog {
-    isClosed = false;
-    options: VDialogOptions;
+  isClosed = false;
+  options: VDialogOptions;
 
-    el: HTMLDivElement;
-    c: string;
+  el: HTMLDivElement;
+  c: string;
 
-    formEl: HTMLFormElement;
-    closeEl: HTMLSpanElement;
+  formEl: HTMLFormElement;
+  closeEl: HTMLSpanElement;
 
-    titleEl?: HTMLHeadingElement;
-    messageEl?: HTMLDivElement;
-    fieldEl?: HTMLElement;
-    
-    vField?: VField;
+  titleEl?: HTMLHeadingElement;
+  messageEl?: HTMLDivElement;
+  fieldEl?: HTMLElement;
 
-    actionsEl: HTMLDivElement;
-    cancelEl?: HTMLButtonElement;
-    submitEl?: HTMLButtonElement;
+  vField?: VField;
 
-    onClose?: (dialog: VDialog, e: Event) => void;
-    onSubmit?: (dialog: VDialog, e: Event) => void;
-    onChange?: (dialog: VDialog, e: Event) => void;
+  actionsEl: HTMLDivElement;
+  cancelEl?: HTMLButtonElement;
+  submitEl?: HTMLButtonElement;
 
-    constructor(options: VDialogOptions) {
-        this.options = options;
-        let { cls, title, message, field, cancel, submit, onClose, onSubmit, onChange } = options;
+  onClose?: (dialog: VDialog, e: Event) => void;
+  onSubmit?: (dialog: VDialog, e: Event) => void;
+  onChange?: (dialog: VDialog, e: Event) => void;
 
-        this.onClose = onClose;
-        this.onSubmit = onSubmit;
-        this.onChange = onChange;
+  constructor(options: VDialogOptions) {
+    this.options = options;
+    let { cls, title, message, field, cancel, submit, onClose, onSubmit, onChange } = options;
 
-        if (isString(title)) title = { innerHTML: title };
-        if (isString(message)) message = { innerHTML: message };
-        if (isString(field)) field = { type: field };
-        if (isString(cancel)) cancel = { innerHTML: cancel };
-        if (isString(submit)) submit = { innerHTML: submit };
+    this.onClose = onClose;
+    this.onSubmit = onSubmit;
+    this.onChange = onChange;
 
-        const c = this.c = cls || 'vDlg';
-        setCss(c, setTemplate(css, { c }));
+    if (isString(title)) title = { innerHTML: title };
+    if (isString(message)) message = { innerHTML: message };
+    if (isString(field)) field = { type: field };
+    if (isString(cancel)) cancel = { innerHTML: cancel };
+    if (isString(submit)) submit = { innerHTML: submit };
 
-        const el = setEl('div', { cls: `${c} ${c}-hide` }) as HTMLDivElement;
-        const formEl = setEl('form', { cls: c + '_form' }) as HTMLFormElement;
-        const closeEl = setEl('span', { cls: c + '_close', innerHTML: '&times;' }) as HTMLSpanElement;
-        const titleEl = title && setEl('h2', { cls: c + '_title', ...title }) as HTMLHeadingElement;
-        const messageEl = message && setEl('div', { cls: c + '_message', ...message }) as HTMLDivElement;
-        const vField = field instanceof HTMLElement ? undefined : field && new VField(field);
-        const fieldEl = vField ? vField.el : field instanceof HTMLElement ? field : undefined;
-        const actionsEl = setEl('div', { cls: c + '_actions' }) as HTMLDivElement;
-        const cancelEl = cancel && setEl('button', { cls: c + '_cancel', ...cancel }) as HTMLButtonElement;
-        const submitEl = submit && setEl('button', { cls: c + '_submit', ...submit }) as HTMLButtonElement;
+    const c = (this.c = cls || 'vDlg');
+    setCss(c, setTemplate(css, { c }));
 
-        this.el = el;
-        this.formEl = formEl;
-        this.closeEl = closeEl;
-        this.titleEl = titleEl;
-        this.messageEl = messageEl;
-        this.vField = vField;
-        this.fieldEl = fieldEl;
-        this.actionsEl = actionsEl;
-        this.cancelEl = cancelEl;
-        this.submitEl = submitEl;
+    const el = setEl('div', { cls: `${c} ${c}-hide` }) as HTMLDivElement;
+    const formEl = setEl('form', { cls: c + '_form' }) as HTMLFormElement;
+    const closeEl = setEl('span', { cls: c + '_close', innerHTML: '&times;' }) as HTMLSpanElement;
+    const titleEl = title && (setEl('h2', { cls: c + '_title', ...title }) as HTMLHeadingElement);
+    const messageEl =
+      message && (setEl('div', { cls: c + '_message', ...message }) as HTMLDivElement);
+    const vField = field instanceof HTMLElement ? undefined : field && new VField(field);
+    const fieldEl = vField ? vField.el : field instanceof HTMLElement ? field : undefined;
+    const actionsEl = setEl('div', { cls: c + '_actions' }) as HTMLDivElement;
+    const cancelEl =
+      cancel && (setEl('button', { cls: c + '_cancel', ...cancel }) as HTMLButtonElement);
+    const submitEl =
+      submit && (setEl('button', { cls: c + '_submit', ...submit }) as HTMLButtonElement);
 
-        addEl(el, formEl);
-        addEl(actionsEl, cancelEl, submitEl);
-        addEl(formEl, closeEl, titleEl, messageEl, fieldEl, actionsEl);
+    this.el = el;
+    this.formEl = formEl;
+    this.closeEl = closeEl;
+    this.titleEl = titleEl;
+    this.messageEl = messageEl;
+    this.vField = vField;
+    this.fieldEl = fieldEl;
+    this.actionsEl = actionsEl;
+    this.cancelEl = cancelEl;
+    this.submitEl = submitEl;
 
-        formEl.onclick = this._onFormClick.bind(this);
-        formEl.onsubmit = this._onSubmit.bind(this);
-        closeEl.onclick = el.onclick = this._onClose.bind(this);
+    addEl(el, formEl);
+    addEl(actionsEl, cancelEl, submitEl);
+    addEl(formEl, closeEl, titleEl, messageEl, fieldEl, actionsEl);
 
-        document.body.appendChild(el);
+    formEl.onclick = this._onFormClick.bind(this);
+    formEl.onsubmit = this._onSubmit.bind(this);
+    closeEl.onclick = el.onclick = this._onClose.bind(this);
 
-        setTimeout(() => {
-            this.el.className = c;
-        }, 20);
-    }
+    document.body.appendChild(el);
 
-    _onFormClick(e: Event) {
-        e.stopPropagation();
-    }
+    setTimeout(() => {
+      this.el.className = c;
+    }, 20);
+  }
 
-    _onClose(e: Event) {
-        e.preventDefault();
-        this.isClosed = true;
-        this.onClose && this.onClose(this, e);
-        const c = this.c;
-        setCls(this.el, { [`${c}-hide`]: true }, true);
-        setTimeout(() => this.el.remove(), 1000);
-    }
-    
-    _onSubmit(e: SubmitEvent) {
-        e.preventDefault();
-        this.onSubmit && this.onSubmit(this, e);
-        this._onClose(e);
-    }
+  _onFormClick(e: Event) {
+    e.stopPropagation();
+  }
 
-    _onChange(e: SubmitEvent) {
-        this.onChange && this.onChange(this, e);
-    }
+  _onClose(e: Event) {
+    e.preventDefault();
+    this.isClosed = true;
+    this.onClose && this.onClose(this, e);
+    const c = this.c;
+    setCls(this.el, { [`${c}-hide`]: true }, true);
+    setTimeout(() => this.el.remove(), 1000);
+  }
 
-    /**
-     * Waits for the dialog to be submitted or closed. This method returns a Promise that resolves
-     * when the dialog's submit or close actions are triggered. It's particularly useful for asynchronous
-     * flows where you need to wait for user interaction before proceeding.
-     * 
-     * The promise resolves with the `VDialog` instance itself, allowing for further interaction with
-     * the dialog after it has been submitted or closed. For example, it can be used to retrieve the value
-     * entered by the user before the dialog was closed.
-     * 
-     * Note: This method modifies the dialog's `onSubmit` and `onClose` handlers to resolve the promise,
-     * which might override any existing handlers assigned to these events. Ensure that no critical
-     * functionality is lost by using this method in contexts where the dialog's submission or closure
-     * are the only actions of interest.
-     * 
-     * @returns {Promise<VDialog>} A promise that resolves with the `VDialog` instance when the dialog is submitted or closed.
-     */
-    waitSubmit() {
-        return new Promise<VDialog>((resolve) => {
-            this.onSubmit = resolve;
-            this.onClose = resolve;
-        });
-    }
+  _onSubmit(e: SubmitEvent) {
+    e.preventDefault();
+    this.onSubmit && this.onSubmit(this, e);
+    this._onClose(e);
+  }
 
-    waitValue() {
-        return this.waitSubmit().then(d => d.getValue());
-    }
+  _onChange(e: SubmitEvent) {
+    this.onChange && this.onChange(this, e);
+  }
 
-    getValue() {
-        if (this.isClosed) return null;
-        return this.vField?.getValue();
-    }
+  /**
+   * Waits for the dialog to be submitted or closed. This method returns a Promise that resolves
+   * when the dialog's submit or close actions are triggered. It's particularly useful for asynchronous
+   * flows where you need to wait for user interaction before proceeding.
+   *
+   * The promise resolves with the `VDialog` instance itself, allowing for further interaction with
+   * the dialog after it has been submitted or closed. For example, it can be used to retrieve the value
+   * entered by the user before the dialog was closed.
+   *
+   * Note: This method modifies the dialog's `onSubmit` and `onClose` handlers to resolve the promise,
+   * which might override any existing handlers assigned to these events. Ensure that no critical
+   * functionality is lost by using this method in contexts where the dialog's submission or closure
+   * are the only actions of interest.
+   *
+   * @returns {Promise<VDialog>} A promise that resolves with the `VDialog` instance when the dialog is submitted or closed.
+   */
+  waitSubmit() {
+    return new Promise<VDialog>((resolve) => {
+      this.onSubmit = resolve;
+      this.onClose = resolve;
+    });
+  }
 
-    setValue(value: string) {
-        this.vField?.setValue(value);
-    }
+  waitValue() {
+    return this.waitSubmit().then((d) => d.getValue());
+  }
+
+  getValue() {
+    if (this.isClosed) return null;
+    return this.vField?.getValue();
+  }
+
+  setValue(value: string) {
+    this.vField?.setValue(value);
+  }
 }
 
 /**
  * A convenience function for creating and returning a new `VDialog` instance.
- * 
+ *
  * @function vDialog
  * @param {VDialogOptions} options - Configuration options for the dialog.
  * @returns {VDialog} An instance of the `VDialog` class.
